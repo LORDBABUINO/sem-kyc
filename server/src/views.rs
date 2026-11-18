@@ -125,7 +125,7 @@ pub struct MissionView {
 
 /// The sector's price this round, as the first seller in it would charge.
 pub fn sector_price(game: &Game, sector: Sector, round: u8) -> u64 {
-    if !matches!(game.phase(), Phase::Negotiation { .. }) {
+    if round == 0 {
         return 0;
     }
     game.players()
@@ -269,7 +269,7 @@ pub struct Me {
 pub fn me(game: &Game, id: PlayerId, public_url: &str) -> Result<Me, ApiError> {
     let p = game.player(id)?;
     let round = game.round();
-    let price = if matches!(game.phase(), Phase::Negotiation { .. }) {
+    let price = if round >= 1 {
         game.unit_price(id, round).map(|a| a.to_sat()).unwrap_or(0)
     } else {
         0

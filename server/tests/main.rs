@@ -140,6 +140,11 @@ async fn a_full_round_through_the_api() {
     assert_eq!(body["phase"]["phase"], "newspaper");
     let padaria = &sessions[0];
     let fazenda = &sessions[1];
+    // Prices are known as soon as the newspaper is out.
+    let (_, me) = call(&app, "GET", "/api/me", &[("x-session", padaria)], None).await;
+    assert_eq!(me["mission"]["items"][0]["price"], 40_000);
+    let (_, seller) = call(&app, "GET", "/api/me", &[("x-session", fazenda)], None).await;
+    assert_eq!(seller["catalog"][0]["price"], 40_000);
     let (status, body) = call(
         &app,
         "POST",
