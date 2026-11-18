@@ -108,7 +108,7 @@ export default function Settings({ me, highlight, onClose, onMe }) {
             ) : (
               <>
                 <span className={styles.small}>
-                  O Estado pede um endereço fixo. Dê a ele um sp1: cada pagamento cai num lugar diferente.
+                  O DOE pede um endereço fixo. Dê a ele um sp1: cada pagamento cai num lugar diferente.
                 </span>
                 <button type="button" className={`${styles.btn} ${styles.btnPrimary}`} onClick={registerSilent} disabled={busy}>
                   recadastrar vitrine como sp1

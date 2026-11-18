@@ -29,7 +29,7 @@ export default function Reveal({ state, clusters, hasTicker }) {
         </div>
 
         <div className={styles.card} data-testid="state-knows">
-          <h3 className={styles.cardTitle}>O que o Estado sabe</h3>
+          <h3 className={styles.cardTitle}>O que o DOE sabe</h3>
           {reveal && reveal.headline_name ? (
             <>
               <p className={styles.cardName}>{reveal.headline_name}</p>
@@ -63,7 +63,7 @@ export default function Reveal({ state, clusters, hasTicker }) {
         <div className={styles.autosRow}>
           <div className={styles.card}>
             <h3 className={styles.cardTitle}>
-              Autuados da rodada {reveal ? reveal.round : state.round} · Edital nº {reveal ? reveal.round : state.round}
+              Autuados da rodada {reveal ? reveal.round : state.round} · Portaria DOE nº {reveal ? reveal.round : state.round}
             </h3>
             {autos.length === 0 ? (
               <p style={{ margin: 0 }}>Nenhum auto de infração lavrado.</p>
@@ -95,7 +95,7 @@ export default function Reveal({ state, clusters, hasTicker }) {
           {state.counter_address && (
             <div className={styles.bigQr}>
               <QrCode value={`bitcoin:${state.counter_address}`} size={Math.min(260, Math.round(window.innerHeight * 0.28))} label="QR grande do guichê" />
-              <span>Guichê do ICMS</span>
+              <span>Guichê do DOE</span>
             </div>
           )}
         </div>

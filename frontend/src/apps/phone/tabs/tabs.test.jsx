@@ -186,7 +186,7 @@ test('History lists entries like a wallet and reveals the txid on tap', () => {
   expect(screen.getByText('na fila')).toBeTruthy()
   expect(screen.getByText('taxa de cadastro da vitrine')).toBeTruthy()
   expect(screen.queryByTestId('txid')).toBeNull()
-  fireEvent.click(screen.getByText('Estado'))
+  fireEvent.click(screen.getByText('DOE'))
   expect(screen.getByTestId('txid').textContent).toBe('11'.repeat(32))
 })
 

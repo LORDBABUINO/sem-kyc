@@ -42,12 +42,12 @@ export default function PayAuto({ me, auto, onClose, onPaid }) {
   }
 
   return (
-    <Overlay title="Guichê do ICMS" onClose={onClose}>
+    <Overlay title="Guichê do DOE" onClose={onClose}>
       <div className={`${styles.card}`} style={{ borderColor: 'var(--danger)' }}>
-        <span className={styles.muted}>Auto de Infração nº {auto.id}</span>
+        <span className={styles.muted}>Auto de Infração DOE nº {auto.id}</span>
         <span className={styles.big}>{formatSats(auto.amount)}</span>
         <span className={styles.small}>
-          Edital nº {auto.round}
+          Portaria DOE nº {auto.round}
           {auto.late_rounds > 0 ? ` · ${auto.late_rounds} rodada(s) em atraso, multa de mora somada` : ''}
         </span>
         <span className={styles.mono}>{me.counter_address}</span>

@@ -91,7 +91,7 @@ impl Game {
     fn name_of(&self, owner: Owner) -> Option<String> {
         match owner {
             Owner::Player(p) => self.player(p).ok().map(|p| p.name.clone()),
-            Owner::State => Some("Estado".to_owned()),
+            Owner::State => Some("DOE".to_owned()),
             Owner::Cooperative => Some("Cooperativa".to_owned()),
             Owner::Exchange => Some("Exchange".to_owned()),
         }
@@ -174,7 +174,7 @@ impl Game {
                             .autos()
                             .iter()
                             .find(|a| a.paid == Some(tx.txid))
-                            .map(|a| format!("ICMS, Auto de Infração nº {}", a.id))
+                            .map(|a| format!("ICMS, Auto de Infração DOE nº {}", a.id))
                             .unwrap_or_else(|| "Taxa de cadastro da vitrine".to_owned()),
                         Origin::Lightning => "Saque pela Lightning".to_owned(),
                         Origin::CoinJoin | Origin::Change if others.len() > 1 => {

@@ -1,13 +1,13 @@
 //! What the screens receive, shaped as `api.md` describes.
 
 use bitcoin::{Amount, OutPoint};
-use fiscal_core::address::ScriptKind;
-use fiscal_core::economy::{PriceStyle, Sector};
-use fiscal_core::game::{
+use rastro_core::address::ScriptKind;
+use rastro_core::economy::{PriceStyle, Sector};
+use rastro_core::game::{
     CoinSelection, Game, Invoice, InvoiceStatus, Mission, Phase, Player, ReceiveMode, Unlock,
 };
-use fiscal_core::ledger::{Coin, Origin, Owner, PlayerId};
-use fiscal_core::view::{AutoView, HistoryEntry, Reveal};
+use rastro_core::ledger::{Coin, Origin, Owner, PlayerId};
+use rastro_core::view::{AutoView, HistoryEntry, Reveal};
 use serde::Serialize;
 
 use crate::error::ApiError;
@@ -108,8 +108,8 @@ impl From<&Player> for PlayerView {
 
 #[derive(Debug, Serialize)]
 pub struct MissionItemView {
-    pub item: fiscal_core::economy::Item,
-    pub status: fiscal_core::game::ItemStatus,
+    pub item: rastro_core::economy::Item,
+    pub status: rastro_core::game::ItemStatus,
     pub price: u64,
     pub supplier: SectorInfo,
 }
@@ -160,7 +160,7 @@ pub struct InvoiceView {
     pub seller: PlayerId,
     pub seller_name: String,
     pub seller_sector: SectorInfo,
-    pub item: fiscal_core::economy::Item,
+    pub item: rastro_core::economy::Item,
     pub amount: u64,
     pub display: String,
     pub uri: String,

@@ -1,9 +1,9 @@
 //! Rehearsal players. They fill the empty sectors, trade among themselves and
 //! make the mistake each round is about, so every slide's detector fires.
 
-use fiscal_core::economy::{PriceStyle, Sector};
-use fiscal_core::game::{CoinSelection, Game, ItemStatus, Phase, ReceiveMode};
-use fiscal_core::ledger::{Origin, Owner, PlayerId};
+use rastro_core::economy::{PriceStyle, Sector};
+use rastro_core::game::{CoinSelection, Game, ItemStatus, Phase, ReceiveMode};
+use rastro_core::ledger::{Origin, Owner, PlayerId};
 
 use crate::error::ApiError;
 use crate::state::{now, Shared};

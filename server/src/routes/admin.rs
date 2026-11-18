@@ -1,8 +1,8 @@
 use axum::extract::{Path, State};
 use axum::http::HeaderMap;
 use axum::Json;
-use fiscal_core::game::{Config, Phase};
-use fiscal_core::ledger::Owner;
+use rastro_core::game::{Config, Phase};
+use rastro_core::ledger::Owner;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
@@ -182,7 +182,7 @@ pub async fn room(State(state): State<Shared>, headers: HeaderMap) -> Result<Jso
     let invoices_open = game
         .players()
         .flat_map(|p| game.invoices_of(p.id))
-        .filter(|i| i.round == round && matches!(i.status, fiscal_core::game::InvoiceStatus::Open))
+        .filter(|i| i.round == round && matches!(i.status, rastro_core::game::InvoiceStatus::Open))
         .count();
     let log = game
         .operations()

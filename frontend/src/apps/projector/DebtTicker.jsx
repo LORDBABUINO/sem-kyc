@@ -33,7 +33,7 @@ export default function DebtTicker({ state, hideQr = false }) {
       {state.counter_address && !hideQr && (
         <div className={styles.cornerQr} data-testid="counter-qr">
           <QrCode value={`bitcoin:${state.counter_address}`} size={96} label="QR do guichê do ICMS" />
-          <span>Guichê do ICMS</span>
+          <span>Guichê do DOE</span>
         </div>
       )}
     </>

@@ -20,7 +20,7 @@ function Footer({ state, round }) {
     <div className={styles.paperFooter}>
       <div>
         <p className={styles.footerHeadline}>
-          {formatNumber(autos.length)} {autos.length === 1 ? 'estabelecimento autuado' : 'estabelecimentos autuados'} pelo Edital nº {reveal.round}. ICMS lançado: {formatSats(reveal.assessed)}, quitado: {formatSats(reveal.collected)}.
+          {formatNumber(autos.length)} {autos.length === 1 ? 'estabelecimento autuado' : 'estabelecimentos autuados'} pelo Portaria DOE nº {reveal.round}. ICMS lançado: {formatSats(reveal.assessed)}, quitado: {formatSats(reveal.collected)}.
         </p>
         {reveal.headline_name && (
           <p style={{ margin: '0.6vh 0 0', fontStyle: 'italic' }}>
@@ -54,8 +54,8 @@ export default function Newspaper({ state, hasTicker }) {
           <span>Edição nº {round}</span>
           <span>Bloco {formatNumber(state.height)}</span>
         </div>
-        <h1 className={styles.mastheadName}>O Fiscal</h1>
-        <p className={styles.mastheadTag}>Órgão oficial da Secretaria da Fazenda. Circula a cada rodada.</p>
+        <h1 className={styles.mastheadName}>O Rastro</h1>
+        <p className={styles.mastheadTag}>Órgão oficial do Departamento de Ordem Econômica da República Democrática de Nova Alvorada.</p>
       </header>
 
       <div className={styles.paperBody}>
@@ -63,15 +63,15 @@ export default function Newspaper({ state, hasTicker }) {
           <h2 className={styles.headline}>{edition ? edition.headline : 'Edição extraordinária'}</h2>
           <p className={styles.subheadline}>{edition ? edition.subheadline : ''}</p>
           <p className={styles.lead}>
-            A Secretaria da Fazenda informa que, até o bloco {formatNumber(state.height)}, {formatNumber(state.registered)} estabelecimentos
+            O DOE informa que, até o bloco {formatNumber(state.height)}, {formatNumber(state.registered)} estabelecimentos
             constam do cadastro estadual. Desde o início da fiscalização foram lançados {formatSats(totals.assessed)} em
-            ICMS, dos quais {formatSats(totals.collected)} já deram entrada no guichê. O Estado lembra que toda
+            ICMS, dos quais {formatSats(totals.collected)} já deram entrada no guichê. O DOE lembra que toda
             transação é pública e permanente, e que a leitura da cadeia é feita em tempo real.
           </p>
         </div>
         {edition && (
-          <aside className={styles.edital} aria-label={`Edital nº ${round}`}>
-            <h3 className={styles.editalTitle}>Edital nº {round}</h3>
+          <aside className={styles.edital} aria-label={`Portaria DOE nº ${round}`}>
+            <h3 className={styles.editalTitle}>Portaria DOE nº {round}</h3>
             <p className={styles.editalText}>{edition.edital}</p>
           </aside>
         )}

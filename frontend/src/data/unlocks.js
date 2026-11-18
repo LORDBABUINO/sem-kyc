@@ -8,7 +8,7 @@ export const UNLOCKS = {
     button: 'ver modo de recebimento',
   },
   coin_control: {
-    sentence: 'Agora você escolhe com qual moeda paga: uma moeda por pagamento, e no guichê use a que o Estado já conhece.',
+    sentence: 'Agora você escolhe com qual moeda paga: uma moeda por pagamento, e no guichê use a que o DOE já conhece.',
     target: 'settings',
     setting: 'coin_selection',
     button: 'ver seleção de moeda',
@@ -20,7 +20,7 @@ export const UNLOCKS = {
     button: 'ver estilo de preço',
   },
   freeze: {
-    sentence: 'Chegou um presente do Estado na sua carteira: não gaste, congele e deixe lá pra sempre.',
+    sentence: 'Chegou um presente do DOE na sua carteira: não gaste, congele e deixe lá pra sempre.',
     target: 'wallet',
     button: 'abrir carteira',
   },
@@ -40,19 +40,19 @@ export const UNLOCKS = {
     button: 'abrir carteira',
   },
   payjoin: {
-    sentence: 'Nas compras desta rodada, peça pra pagar junto: o Payjoin confunde a presunção do Estado.',
+    sentence: 'Nas compras desta rodada, peça pra pagar junto: o Payjoin confunde a presunção do DOE.',
     target: 'settings',
     setting: 'receive_mode',
     button: 'ver modo de recebimento',
   },
   silent_payments: {
-    sentence: 'Dê ao Estado um sp1: é fixo, pode imprimir, e cada pagamento cai num lugar diferente.',
+    sentence: 'Dê ao DOE um sp1: é fixo, pode imprimir, e cada pagamento cai num lugar diferente.',
     target: 'settings',
     setting: 'receive_mode',
     button: 'ver modo de recebimento',
   },
   report: {
-    sentence: 'Seu relatório está pronto: é o dossiê que o Estado mantinha sobre você.',
+    sentence: 'Seu relatório está pronto: é o dossiê que o DOE mantinha sobre você.',
     target: 'report',
     button: 'abrir relatório',
   },

@@ -34,12 +34,12 @@ a configuração. Só uma frase. A aula é no projetor.
 ### Situação irregular (auto de infração)
 
 Quando o jogador é autuado no reveal, o app inteiro ganha uma faixa vermelha no
-topo: "Inscrição estadual suspensa. Auto de Infração nº 12: ICMS devido 43.200
+topo: "Inscrição estadual suspensa. Auto de Infração DOE nº 12: ICMS devido 43.200
 sats." Os botões de pagar e de vender ficam desabilitados com a legenda "regularize
 pra operar". Pra pagar, o jogador escaneia o QR do guichê no projetor; a faixa também
 traz o botão "pagar no guichê" como cópia, pra quem não alcança a tela. A tela de
 pagamento do auto é a mesma de qualquer pagamento, com seleção de moeda: é uma
-transação real pro endereço do Estado. Paga, a faixa some e os botões voltam.
+transação real pro endereço do DOE. Paga, a faixa some e os botões voltam.
 Dívida que atravessa uma rodada aparece com a multa de mora somada.
 
 ### Carteira
@@ -98,8 +98,8 @@ está na rodada 8, aparece "pagar junto (Payjoin)" como botão principal.
 
 Lista de transações em ordem inversa, no formato de carteira comum: seta de
 entrada ou saída, valor, contraparte quando conhecida pelo próprio jogador
-("Transportadora do Zé", "cooperativa", "Estado"), item ou motivo curto, bloco.
-O pagamento de um auto aparece como saída pro Estado com o texto "ICMS, Auto de
+("Transportadora do Zé", "cooperativa", "DOE"), item ou motivo curto, bloco.
+O pagamento de um auto aparece como saída pro DOE com o texto "ICMS, Auto de
 Infração nº N", sem o motivo. O cashback
 aparece como entrada de 546 sats de "desconhecido". Toque em uma transação abre
 inputs e outputs crus, com endereços, pra quem quiser olhar com os próprios olhos.
@@ -117,15 +117,16 @@ warnings de todas as rodadas, agrupados por tipo, com severidade, evidência (tx
 endereços, valores) e a correção. Mesmo formato do frontend do Stealth, pra
 reaproveitar componente.
 
-## 2. Projetor (a visão do Estado)
+## 2. Projetor (a visão do DOE)
 
 Tela cheia, sem interação. Três estados, trocados pelo painel do apresentador.
 
 ### Jornal
 
-Primeira página de O Fiscal. Cabeçalho com nome, data fictícia ("Rodada 3"), bloco
-atual. Manchete e linha fina em corpo grande. Edital à direita, em caixa. Rodapé
-com a apuração da rodada anterior: "17 estabelecimentos autuados pelo Edital nº 2,
+Primeira página de O Rastro. Cabeçalho com nome, a linha "Órgão oficial do
+Departamento de Ordem Econômica da República Democrática de Nova Alvorada", data fictícia ("Rodada 3"), bloco
+atual. Manchete e linha fina em corpo grande. Portaria à direita, em caixa. Rodapé
+com a apuração da rodada anterior: "17 estabelecimentos autuados pelo Portaria DOE nº 2,
 ICMS lançado: 410.000 sats, quitado: 260.000", e uma coluna estreita com os nomes,
 os valores e a situação (quitado ou em aberto) em corpo pequeno. Na edição 1 o rodapé diz "Cadastro concluído: N
 estabelecimentos".
@@ -134,7 +135,7 @@ estabelecimentos".
 
 Grafo de força, atualizado a cada transação pelo WebSocket, com:
 
-- Nó = cluster, tamanho proporcional ao saldo que o Estado estima, cor da
+- Nó = cluster, tamanho proporcional ao saldo que o DOE estima, cor da
   identidade quando rotulado, cinza quando não, listrado com as duas cores quando
   em conflito. Dentro do nó, pontos pequenos são os endereços.
 - Aresta = transação entre clusters. Pulsa quando entra.
@@ -153,15 +154,15 @@ Regras de fusão (union-find global, incremental, no backend):
 1. Inputs da mesma transação pertencem ao mesmo cluster (CIOH), exceto se a
    transação tem a forma de CoinJoin (3 ou mais outputs do mesmo valor) ou foi
    marcada como Payjoin pelo próprio jogo. Em Payjoin a fusão acontece mesmo assim,
-   porque o Estado não sabe que é Payjoin: é isso que cria o conflito.
+   porque o DOE não sabe que é Payjoin: é isso que cria o conflito.
 2. Output identificado como troco entra no cluster dos inputs. Troco é: o output
    de valor não redondo quando o outro é redondo; o output do mesmo tipo de script
    dos inputs quando o outro difere; o único output quando há um só e ele não é o
-   valor pedido em nenhum pedido conhecido do Estado (o Estado não conhece
+   valor pedido em nenhum pedido conhecido do DOE (o DOE não conhece
    pedidos; só a primeira e a segunda regra valem).
 3. Endereço reutilizado: todas as transações pro mesmo endereço entram no mesmo
    cluster.
-4. Dust do Estado gasto junto com outros inputs: já coberto pela regra 1, mas o
+4. Dust do DOE gasto junto com outros inputs: já coberto pela regra 1, mas o
    evento é marcado pra animação e pro rodapé.
 5. Rótulos: endereço da vitrine cadastrado na rodada 0; a partir da rodada 5, o
    UTXO inicial da Loja de eletrônicos. Um cluster com dois rótulos diferentes é
@@ -174,10 +175,10 @@ Painel que entra sobre o grafo quando a negociação fecha:
 - Zoom no cluster do caso da manchete seguinte (o finding mais grave da rodada,
   desempate aleatório; o backend escolhe entre os jogadores que têm o detector da
   rodada).
-- Cartão "o que o Estado sabe": nome, operações identificadas na rodada contra as
+- Cartão "o que o DOE sabe": nome, operações identificadas na rodada contra as
   reais, número de endereços ligados, contrapartes identificadas (nomes), e o ICMS
   lançado.
-- Lista de autuados da rodada: nome, valor devido, edital que fundamenta. Ao lado,
+- Lista de autuados da rodada: nome, valor devido, portaria que fundamenta. Ao lado,
   o QR do guichê do ICMS em tamanho grande. Total lançado na rodada.
 - Se houve CoinJoin ou Payjoin na rodada, segunda cena mostrando a transação e o
   painel vazio ou em conflito.
@@ -216,19 +217,19 @@ dependências de workspace. Pode viver como crate do repositório do Stealth
 Vite, sem TypeScript e sem Tailwind, pra reaproveitar componentes do frontend do
 Stealth no relatório final. Grafo com d3-force.
 
-### Estado
+### DOE
 
 - `players`: id, nome, setor, cor, sessão, endereço da vitrine, configurações,
   missões por rodada com estado de cada item.
 - `ledger`: transações em memória no formato que `TxGraph::from_wallet_history`
   consome (`DecodedTransaction`, `WalletHistory` por jogador). Carteiras internas:
-  Estado, cooperativa, exchange (origem do saldo da Loja), minerador fictício
+  DOE, cooperativa, exchange (origem do saldo da Loja), minerador fictício
   (origem dos saldos iniciais).
 - `blocks`: contador, fecha a cada 30 segundos, carimba as transações pendentes.
 - `clusters`: union-find global com as regras da seção 2, incremental.
 - `rounds`: edição atual, estado (jornal, negociação, apurado), preços da rodada,
   bônus pagos, manchete escolhida.
-- `autos`: autos de infração: jogador, rodada, operações que fundamentam, edital,
+- `autos`: autos de infração: jogador, rodada, operações que fundamentam, portaria,
   valor (imposto mais multa de ofício, mais mora acumulada), estado (aberto, pago),
   txid do pagamento. Jogador com auto aberto não gera pedido nem paga pedido.
 - `invoices`: pedidos abertos, código de 6 caracteres, vendedor, item, valor,
@@ -258,10 +259,10 @@ cluster do pagador e o cluster do output recebido no union-find. Ponta em cluste
 rotulado sem conflito deve 18% do valor mais 100% de multa de ofício. Os autos de
 um jogador na rodada são somados em um auto só. Assim o grafo e a cobrança nunca
 discordem. O pagamento do auto é uma transação comum do jogador pro endereço do
-guichê (fixo, reutilizado de propósito: o Estado não se esconde), e entra no
+guichê (fixo, reutilizado de propósito: o DOE não se esconde), e entra no
 union-find como qualquer outra: as moedas usadas ganham o rótulo do pagador.
 
-A taxa de rede do Edital nº 6 é narrativa: o ledger do jogo não cobra fee, pra
+A taxa de rede do Portaria DOE nº 6 é narrativa: o ledger do jogo não cobra fee, pra
 um pagamento no valor exato continuar sem troco.
 
 ### Preços

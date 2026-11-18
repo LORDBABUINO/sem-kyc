@@ -1,6 +1,6 @@
-export const SESSION_KEY = 'fiscal.session'
-export const ADMIN_KEY = 'fiscal.admin'
-export const TAB_KEY = 'fiscal.tab'
+export const SESSION_KEY = 'rastro.session'
+export const ADMIN_KEY = 'rastro.admin'
+export const TAB_KEY = 'rastro.tab'
 
 export const storage = {
   get(key) {

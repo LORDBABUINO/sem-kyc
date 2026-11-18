@@ -1,13 +1,13 @@
 # API do servidor
 
-Contrato entre `fiscal-server` e o frontend. JSON em tudo; valores em sats
+Contrato entre `rastro-server` e o frontend. JSON em tudo; valores em sats
 (inteiros); endereços como string; `outpoint` é `"txid:vout"`.
 
 ## Autenticação
 
 - Jogador: header `X-Session: <token>` devolvido pelo `join`. O frontend guarda em
   `localStorage` e manda em toda chamada e no WebSocket (`/ws?session=<token>`).
-- Apresentador: header `X-Admin: <token>` (token vem da variável `FISCAL_ADMIN_TOKEN`
+- Apresentador: header `X-Admin: <token>` (token vem da variável `RASTRO_ADMIN_TOKEN`
   ou da flag `--admin-token`). WebSocket em `/ws/admin?token=<token>`.
 - Projetor: sem autenticação. WebSocket em `/ws/projector`.
 

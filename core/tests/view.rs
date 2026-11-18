@@ -1,8 +1,8 @@
 use bitcoin::Amount;
-use fiscal_core::cluster::Identity;
-use fiscal_core::economy::Sector;
-use fiscal_core::game::ReceiveMode;
-use fiscal_core::view::Direction;
+use rastro_core::cluster::Identity;
+use rastro_core::economy::Sector;
+use rastro_core::game::ReceiveMode;
+use rastro_core::view::Direction;
 
 use crate::common::*;
 
@@ -24,7 +24,7 @@ fn the_history_reads_like_a_wallet_and_hides_the_verdicts() {
         .iter()
         .find(|h| h.memo == "Taxa de cadastro da vitrine")
         .expect("fee entry");
-    assert_eq!(fee.counterparty.as_deref(), Some("Estado"));
+    assert_eq!(fee.counterparty.as_deref(), Some("DOE"));
     assert_eq!(fee.amount, Amount::from_sat(10_000));
     assert!(history.iter().filter(|h| h.memo == "Saldo inicial").count() >= 1);
     let seller_history = g.history(seller);
@@ -48,7 +48,7 @@ fn paying_the_counter_shows_the_assessment_number_only() {
     let history = g.history(padaria);
     assert_eq!(
         history[0].memo,
-        format!("ICMS, Auto de Infração nº {auto_id}")
+        format!("ICMS, Auto de Infração DOE nº {auto_id}")
     );
     assert!(history
         .iter()

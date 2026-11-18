@@ -1,10 +1,10 @@
 use axum::body::Body;
 use axum::http::{Request, StatusCode};
 use axum::Router;
-use fiscal_core::game::Config;
-use fiscal_server::state::{AppState, Shared};
-use fiscal_server::ws::{fan_out, listens, Audience};
 use http_body_util::BodyExt;
+use rastro_core::game::Config;
+use rastro_server::state::{AppState, Shared};
+use rastro_server::ws::{fan_out, listens, Audience};
 use serde_json::{json, Value};
 use tower::ServiceExt;
 
@@ -14,10 +14,10 @@ fn setup() -> (Router, Shared) {
     let state = AppState::new(
         Config::default(),
         ADMIN.to_owned(),
-        "http://fiscal.test".to_owned(),
+        "http://rastro.test".to_owned(),
     )
     .expect("state");
-    (fiscal_server::app(state.clone(), None), state)
+    (rastro_server::app(state.clone(), None), state)
 }
 
 async fn call(
@@ -109,7 +109,7 @@ async fn joining_registering_and_reading_me() {
     assert_eq!(me["player"]["registered"], true);
     assert_eq!(me["balance"], 1_990_000);
     assert_eq!(me["history"][0]["memo"], "Taxa de cadastro da vitrine");
-    assert_eq!(me["history"][0]["counterparty"], "Estado");
+    assert_eq!(me["history"][0]["counterparty"], "DOE");
 
     let (status, body) = call(
         &app,
@@ -233,7 +233,7 @@ async fn a_full_round_through_the_api() {
     let (_, state) = call(&app, "GET", "/api/state", &[], None).await;
     assert_eq!(state["payments_this_round"], 1);
     assert_eq!(state["players"], 8);
-    assert_eq!(state["join_url"], "http://fiscal.test/");
+    assert_eq!(state["join_url"], "http://rastro.test/");
     let (_, clusters) = call(&app, "GET", "/api/clusters", &[], None).await;
     assert!(clusters["clusters"].as_array().expect("clusters").len() >= 8);
     assert!(clusters["edges"]
@@ -271,7 +271,7 @@ async fn a_full_round_through_the_api() {
     assert_eq!(me["suspended"], false);
     assert_eq!(
         me["history"][0]["memo"],
-        format!("ICMS, Auto de Infração nº {auto_id}")
+        format!("ICMS, Auto de Infração DOE nº {auto_id}")
     );
 
     let (status, room) = call(&app, "GET", "/api/admin/room", &[("x-admin", ADMIN)], None).await;
@@ -309,7 +309,7 @@ async fn bots_fill_the_room_and_trade_among_themselves() {
     assert_eq!(body["players"].as_array().expect("players").len(), 8);
     admin(&app, "advance").await;
     admin(&app, "open").await;
-    let made = fiscal_server::bots::step(&state);
+    let made = rastro_server::bots::step(&state);
     assert!(made >= 6, "{made} payments");
     let (_, st) = call(&app, "GET", "/api/state", &[], None).await;
     assert_eq!(st["payments_this_round"], made);
@@ -351,7 +351,7 @@ async fn config_and_reset_are_for_the_presenter() {
 
 #[test]
 fn events_reach_their_audiences() {
-    let mut game = fiscal_core::game::Game::new(Config::default()).expect("game");
+    let mut game = rastro_core::game::Game::new(Config::default()).expect("game");
     let a = game.join("A").expect("a");
     let b = game.join("B").expect("b");
     game.register(a).expect("ra");

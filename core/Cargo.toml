@@ -1,11 +1,11 @@
 [package]
-name = "fiscal-core"
+name = "rastro-core"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
 rust-version.workspace = true
-description = "Game rules of O Fiscal: an in-memory Bitcoin ledger, the State's cluster view and the ICMS"
+description = "Game rules of O Rastro: an in-memory Bitcoin ledger, the State's cluster view and the ICMS"
 autotests = false
 
 [dependencies]

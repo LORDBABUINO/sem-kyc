@@ -85,7 +85,7 @@ test('suspended: red banner, disabled buy and sell, pay at the counter', async (
   ])
   render(<PhoneApp />)
   await screen.findByRole('alert')
-  expect(screen.getByText(/Auto de Infração nº 12: ICMS devido 43.200 sats/)).toBeTruthy()
+  expect(screen.getByText(/Auto de Infração DOE nº 12: ICMS devido 43.200 sats/)).toBeTruthy()
   expect(screen.getByText('escanear pra pagar').disabled).toBe(true)
   expect(screen.getAllByText('regularize pra operar').length).toBeGreaterThan(0)
 
@@ -93,7 +93,7 @@ test('suspended: red banner, disabled buy and sell, pay at the counter', async (
   expect(screen.getByText('refeições da colheita').closest('button').disabled).toBe(true)
 
   fireEvent.click(screen.getByText('pagar no guichê'))
-  await screen.findByRole('dialog', { name: 'Guichê do ICMS' })
+  await screen.findByRole('dialog', { name: 'Guichê do DOE' })
   fireEvent.click(screen.getByText('pagar 43.200 sats'))
   await screen.findByText('Auto quitado.')
   expect(fetchMock.find('POST', '/api/autos/12/pay')[0].body).toEqual({})
@@ -115,6 +115,6 @@ test('remembers the current tab', async () => {
   render(<PhoneApp />)
   await screen.findByText('Rodada 1')
   fireEvent.click(screen.getByRole('tab', { name: /Crachá/ }))
-  expect(storage.get('fiscal.tab')).toBe('badge')
+  expect(storage.get('rastro.tab')).toBe('badge')
   expect(screen.getByText('Padaria da Lu')).toBeTruthy()
 })

@@ -107,7 +107,7 @@ test('PayAuto pays with manual coins and reports the txid', async () => {
   const fetchMock = mockFetch([['POST', '/api/autos/7/pay', { txid: 'ab'.repeat(32) }]])
   const onPaid = vi.fn()
   render(<PayAuto me={me} auto={auto} onClose={noop} onPaid={onPaid} />)
-  expect(screen.getByText('Auto de Infração nº 7')).toBeTruthy()
+  expect(screen.getByText('Auto de Infração DOE nº 7')).toBeTruthy()
   expect(screen.getByText(/multa de mora somada/)).toBeTruthy()
   expect(screen.getByText('pagar 30.000 sats').disabled).toBe(true)
   fireEvent.click(screen.getByLabelText('moeda de 60.000 sats'))

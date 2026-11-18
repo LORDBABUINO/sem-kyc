@@ -1,6 +1,6 @@
 use axum::extract::State;
 use axum::Json;
-use fiscal_core::view::ClusterSnapshot;
+use rastro_core::view::ClusterSnapshot;
 
 use crate::state::Shared;
 use crate::views::{self, PublicState};

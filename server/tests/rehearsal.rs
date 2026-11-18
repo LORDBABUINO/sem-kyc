@@ -1,21 +1,21 @@
 //! The bots play the eight rounds alone. Every slide's detector has to fire on
 //! the mistake the bots make for it; this is the rehearsal the talk relies on.
 
-use fiscal_core::game::{round_detectors, Config, Phase};
-use fiscal_server::state::AppState;
+use rastro_core::game::{round_detectors, Config, Phase};
+use rastro_server::state::AppState;
 use stealth_engine::types::VulnerabilityType;
 
 #[test]
 fn eight_bots_trigger_each_rounds_detector() {
     let state =
         AppState::new(Config::default(), "x".to_owned(), "http://t".to_owned()).expect("state");
-    fiscal_server::bots::add(&state, 8).expect("bots");
+    rastro_server::bots::add(&state, 8).expect("bots");
     let mut headlines = Vec::new();
     for round in 1..=8u8 {
         state.with_game(|g| g.advance()).expect("advance");
-        fiscal_server::bots::on_newspaper(&state);
+        rastro_server::bots::on_newspaper(&state);
         state
-            .with_game(|g| g.open_negotiation(fiscal_server::state::now()))
+            .with_game(|g| g.open_negotiation(rastro_server::state::now()))
             .expect("open");
         if round == 4 {
             state.with_game(|g| g.dust_attack()).expect("dust");
@@ -24,10 +24,10 @@ fn eight_bots_trigger_each_rounds_detector() {
             state.with_game(|g| Ok(g.apply_kyc())).expect("kyc");
         }
         for _ in 0..3 {
-            fiscal_server::bots::step(&state);
+            rastro_server::bots::step(&state);
         }
         let phase = state
-            .with_game(|g| g.close_round(fiscal_server::state::now() + 1))
+            .with_game(|g| g.close_round(rastro_server::state::now() + 1))
             .expect("close");
         assert_eq!(phase, Phase::Reveal { round });
         let game = state.game();

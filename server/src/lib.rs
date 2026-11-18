@@ -1,4 +1,4 @@
-//! HTTP and WebSocket transport for O Fiscal.
+//! HTTP and WebSocket transport for O Rastro.
 
 pub mod bots;
 pub mod error;

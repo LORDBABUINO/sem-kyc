@@ -1,5 +1,5 @@
-use fiscal_core::economy::Sector;
-use fiscal_core::game::{GameError, Phase, Unlock};
+use rastro_core::economy::Sector;
+use rastro_core::game::{GameError, Phase, Unlock};
 use stealth_engine::types::VulnerabilityType;
 
 use crate::common::*;
@@ -92,7 +92,7 @@ fn round_two_headline_is_about_common_inputs() {
     // In round 2 the Fazenda sells to one sector, so its item costs 120_000:
     // the automatic wallet joins two of the Padaria's coins to pay it.
     let padaria = player_in(&g, Sector::Padaria);
-    g.set_coin_selection(padaria, fiscal_core::game::CoinSelection::Automatic)
+    g.set_coin_selection(padaria, rastro_core::game::CoinSelection::Automatic)
         .expect("auto");
     let fazenda = player_in(&g, Sector::Fazenda);
     let txid = trade(&mut g, padaria, fazenda, "lote grande de farinha", NOW);

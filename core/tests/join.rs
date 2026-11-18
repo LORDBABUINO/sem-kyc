@@ -1,8 +1,8 @@
 use bitcoin::Amount;
-use fiscal_core::cluster::Identity;
-use fiscal_core::economy::Sector;
-use fiscal_core::game::{Config, Game, GameError, Phase};
-use fiscal_core::ledger::Owner;
+use rastro_core::cluster::Identity;
+use rastro_core::economy::Sector;
+use rastro_core::game::{Config, Game, GameError, Phase};
+use rastro_core::ledger::Owner;
 
 use crate::common::*;
 
@@ -66,7 +66,7 @@ fn registration_pays_the_state_and_names_the_payer() {
     assert_eq!(g.identity(&p.storefront), Identity::Known(id));
     // The coin that paid the fee, and its change, carry the name too.
     for coin in g.ledger.coins_of(Owner::Player(id)) {
-        if coin.origin == fiscal_core::ledger::Origin::Change {
+        if coin.origin == rastro_core::ledger::Origin::Change {
             assert_eq!(g.identity(&coin.address), Identity::Known(id));
         }
     }
@@ -81,7 +81,7 @@ fn the_exchange_funded_sector_is_unknown_until_kyc() {
         .ledger
         .all_coins_of(Owner::Player(loja))
         .into_iter()
-        .find(|c| c.origin == fiscal_core::ledger::Origin::ExchangeWithdrawal)
+        .find(|c| c.origin == rastro_core::ledger::Origin::ExchangeWithdrawal)
         .cloned()
         .expect("exchange coin");
     assert_eq!(g.exchange_txids().len(), 1);
@@ -106,7 +106,7 @@ fn the_exchange_funded_sector_is_unknown_until_kyc() {
     assert!(g
         .drain_events()
         .iter()
-        .any(|e| matches!(e, fiscal_core::game::Event::Kyc { .. })));
+        .any(|e| matches!(e, rastro_core::game::Event::Kyc { .. })));
     assert!(is_exchange(&g.report(loja)));
 }
 
@@ -118,9 +118,9 @@ fn a_late_joiner_gets_the_rooms_unlocks_and_the_current_mission() {
     let late = g.join("Atrasada").expect("join");
     g.register(late).expect("register");
     let p = g.player(late).expect("p");
-    assert!(p.has(fiscal_core::game::Unlock::FreshAddress));
-    assert!(p.has(fiscal_core::game::Unlock::CoinControl));
-    assert_eq!(p.receive_mode, fiscal_core::game::ReceiveMode::Fresh);
+    assert!(p.has(rastro_core::game::Unlock::FreshAddress));
+    assert!(p.has(rastro_core::game::Unlock::CoinControl));
+    assert_eq!(p.receive_mode, rastro_core::game::ReceiveMode::Fresh);
     assert_eq!(p.missions[&2].items.len(), 2);
     assert!(!p.missions.contains_key(&1));
 }

@@ -11,7 +11,7 @@ test('has the eight editions with headline, subheadline and edital', () => {
   }
   expect(Object.keys(EDITIONS)).toHaveLength(8)
   expect(editionFor(9)).toBeNull()
-  expect(FINAL_EDITION.headline).toBe('Estado liberta os arquivos')
+  expect(FINAL_EDITION.headline).toBe('DOE liberta os arquivos')
   expect(FINAL_EDITION.takeaways).toHaveLength(6)
 })
 

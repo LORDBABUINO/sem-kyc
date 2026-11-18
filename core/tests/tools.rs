@@ -1,9 +1,9 @@
 use bitcoin::Amount;
-use fiscal_core::address::ScriptKind;
-use fiscal_core::cluster::{is_coinjoin_shape, Identity};
-use fiscal_core::economy::Sector;
-use fiscal_core::game::{Event, GameError, ReceiveMode};
-use fiscal_core::ledger::{Origin, Owner};
+use rastro_core::address::ScriptKind;
+use rastro_core::cluster::{is_coinjoin_shape, Identity};
+use rastro_core::economy::Sector;
+use rastro_core::game::{Event, GameError, ReceiveMode};
+use rastro_core::ledger::{Origin, Owner};
 
 use crate::common::*;
 
@@ -122,7 +122,7 @@ fn lightning_round_trip_on_a_fresh_exchange_coin() {
     let addr = g.player(loja).expect("p").storefront.clone();
     let txid = g
         .ledger
-        .mint(vec![fiscal_core::ledger::OutputSpec {
+        .mint(vec![rastro_core::ledger::OutputSpec {
             address: addr.clone(),
             amount: Amount::from_sat(300_000),
             owner: Owner::Player(loja),

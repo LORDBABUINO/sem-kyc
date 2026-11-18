@@ -1,17 +1,17 @@
 [package]
-name = "fiscal-server"
+name = "rastro-server"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
 rust-version.workspace = true
-description = "HTTP and WebSocket transport for O Fiscal"
+description = "HTTP and WebSocket transport for O Rastro"
 autotests = false
 
 [dependencies]
 axum = { workspace = true }
 bitcoin = { workspace = true }
-fiscal-core = { workspace = true }
+rastro-core = { workspace = true }
 futures-util = { workspace = true }
 rand = { workspace = true }
 serde = { workspace = true }

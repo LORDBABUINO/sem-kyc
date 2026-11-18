@@ -16,7 +16,7 @@ export default function SuspendedBanner({ me, onPay }) {
       {autos.map((auto) => (
         <div key={auto.id} className={styles.bannerLine}>
           <span>
-            Auto de Infração nº {auto.id}: ICMS devido {formatSats(auto.amount)}.
+            Auto de Infração DOE nº {auto.id}: ICMS devido {formatSats(auto.amount)}.
           </span>
           <button type="button" className={styles.bannerBtn} onClick={() => onPay(auto)}>
             pagar no guichê
