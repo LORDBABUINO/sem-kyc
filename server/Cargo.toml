@@ -1,0 +1,39 @@
+[package]
+name = "fiscal-server"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "HTTP and WebSocket transport for O Fiscal"
+autotests = false
+
+[dependencies]
+axum = { workspace = true }
+bitcoin = { workspace = true }
+fiscal-core = { workspace = true }
+futures-util = { workspace = true }
+rand = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+stealth-engine = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tower-http = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+[dev-dependencies]
+http-body-util = { workspace = true }
+tower = { workspace = true }
+
+[[test]]
+name = "main"
+path = "tests/main.rs"
+
+[[test]]
+name = "rehearsal"
+path = "tests/rehearsal.rs"
+
+[lints.rust]
+missing_debug_implementations = "deny"
