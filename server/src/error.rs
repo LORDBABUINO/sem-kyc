@@ -67,6 +67,7 @@ impl From<GameError> for ApiError {
             GameError::InvoiceClosed => "esse pedido não está mais aberto".to_owned(),
             GameError::SelfPayment => "você não pode pagar a si mesmo".to_owned(),
             GameError::NotInCatalog(item) => format!("{item} não está no seu catálogo"),
+            GameError::NoDemand => "ninguém compra do seu setor nesta rodada".to_owned(),
             GameError::InsufficientFunds => {
                 "moedas insuficientes (as congeladas não contam)".to_owned()
             }

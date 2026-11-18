@@ -281,6 +281,8 @@ pub enum GameError {
     SelfPayment,
     #[error("{0} is not in your catalog")]
     NotInCatalog(String),
+    #[error("nobody buys from your sector this round")]
+    NoDemand,
     #[error("not enough unfrozen coins")]
     InsufficientFunds,
     #[error("{0} is not one of your spendable coins")]

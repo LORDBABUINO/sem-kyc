@@ -102,7 +102,7 @@ fn a_cluster_with_two_names_is_not_assessed() {
         .filter(|op| g.identity(&g.ledger.coin(op).expect("c").address) == Identity::Known(fazenda))
         .copied()
         .collect();
-    let contributed = known.first().copied().unwrap_or(mine[0]);
+    let contributed = *known.first().expect("a coin the State already named");
     let txid = g
         .respond_payjoin(fazenda, &invoice.code, Some(contributed))
         .expect("settled");
@@ -207,4 +207,59 @@ fn an_exact_payment_is_billed_once_and_the_seller_stays_unknown() {
         Amount::from_sat(invoice.amount.to_sat() * 36 / 100)
     );
     assert!(g.autos_of(energia).is_empty());
+}
+
+/// A buyer whose change goes to a Taproot address while paying with a Segwit
+/// coin confuses the State into calling the seller's output the change. The
+/// State then sees one person on both ends: one operation, billed once.
+#[test]
+fn the_same_player_on_both_ends_is_billed_once() {
+    let mut g = game(8);
+    skip_rounds(&mut g, 6, NOW);
+    for a in g.autos().to_vec() {
+        if a.paid.is_none() {
+            g.pay_auto(a.player, a.id, None).expect("settle");
+        }
+    }
+    start_round(&mut g, NOW);
+    let padaria = player_in(&g, Sector::Padaria);
+    let fazenda = player_in(&g, Sector::Fazenda);
+    g.set_price_style(fazenda, fiscal_core::economy::PriceStyle::Odd)
+        .expect("odd");
+    let mine = coins(&g, padaria);
+    g.migrate_taproot(padaria, &mine[..1], false)
+        .expect("one coin");
+    let segwit: Vec<_> = g
+        .spendable(padaria)
+        .iter()
+        .filter(|c| c.kind == fiscal_core::address::ScriptKind::Segwit)
+        .map(|c| c.outpoint)
+        .collect();
+    let invoice = g
+        .create_invoice(fazenda, "farinha e ovos", NOW)
+        .expect("invoice");
+    g.pay_invoice(padaria, &invoice.code, Some(&segwit[..2]), false)
+        .expect("paid");
+    assert_eq!(g.identity(&invoice.address), Identity::Known(padaria));
+    g.close_round(NOW + 200).expect("close");
+    let autos = g.autos_of(padaria);
+    assert_eq!(autos.len(), 1);
+    assert_eq!(autos[0].base, invoice.amount);
+    assert!(g.autos_of(fazenda).is_empty());
+}
+
+#[test]
+fn the_presenter_can_forgive_an_assessment() {
+    let mut g = game(8);
+    start_round(&mut g, NOW);
+    let padaria = player_in(&g, Sector::Padaria);
+    complete_mission(&mut g, padaria, NOW);
+    g.close_round(NOW + 200).expect("close");
+    let auto_id = g.autos_of(padaria)[0].id;
+    assert!(g.is_suspended(padaria));
+    g.forgive_auto(auto_id).expect("forgiven");
+    assert!(!g.is_suspended(padaria));
+    assert_eq!(g.debt(padaria), Amount::ZERO);
+    assert_eq!(g.forgive_auto(auto_id), Err(GameError::AutoPaid));
+    assert_eq!(g.forgive_auto(999), Err(GameError::UnknownAuto));
 }

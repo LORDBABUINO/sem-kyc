@@ -129,12 +129,12 @@ Reveal = {round, headline:{round, player, finding}|null, headline_name, autos:[A
 Mensagens JSON `{event, ...}`. Todo cliente recebe `{event:"phase", phase}` ao conectar.
 
 Jogador (`/ws?session=`): `phase`, `mission` (nova rodada: `{round}`), `unlock` `{unlock}`,
-`invoice_paid` `{code, txid}`, `payjoin_request` `{code}`, `tx` `{txid}`, `auto` `{auto_id, amount, paid}`,
+`invoice_paid` `{code, txid}`, `payjoin_request` `{code}`, `tx` `{txid}`, `auto` `{auto_id, amount, paid, txid?}`,
 `bonus` `{txid, amount}`, `report_available`, `coinjoin` `{txid|null}`. Ao receber qualquer
 um, o celular refaz `GET /api/me`.
 
 Projetor (`/ws/projector`): `phase`, `block` `{height}`, `tx` `{txid, clusters:[ClusterEvent]}` com
-`ClusterEvent = {event:"merged", absorbed, into, cause:"common_input"|"change"|"self_transfer", txid}
+`ClusterEvent = {event:"merged", absorbed, into, cause:"common_input"|"change", txid}
 | {event:"labeled", root, player} | {event:"conflict", root, players}`,
 `kyc` `{clusters:[ClusterEvent]}`, `reveal` `{round}`, `auto` `{auto_id, player, amount, paid}`,
 `coinjoin` `{txid|null, players}`, `payments` `{round, count}`. Ao receber `tx`, o projetor

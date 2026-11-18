@@ -139,6 +139,9 @@ impl Game {
             .cloned()
             .ok_or_else(|| GameError::NotInCatalog(item_name.to_owned()))?;
         let amount = self.unit_price(seller, round)?;
+        if amount == Amount::ZERO {
+            return Err(GameError::NoDemand);
+        }
         let (address, display, payjoin) = match mode {
             ReceiveMode::Storefront => {
                 let d = storefront.assume_checked_ref().to_string();

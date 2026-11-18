@@ -373,3 +373,15 @@ fn duplicate_inputs_never_pay_twice() {
     );
     assert_eq!(balance(&g, padaria), before);
 }
+
+#[test]
+fn a_sector_nobody_buys_from_cannot_invoice() {
+    let mut g = game(1);
+    start_round(&mut g, NOW);
+    let padaria = player_in(&g, Sector::Padaria);
+    assert_eq!(
+        g.create_invoice(padaria, "refeições do canteiro", NOW)
+            .map(|_| ()),
+        Err(GameError::NoDemand)
+    );
+}

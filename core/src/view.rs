@@ -125,7 +125,21 @@ impl Game {
             }
             let round = received.first().map(|c| c.round).unwrap_or(0);
             let height = self.ledger.block_height(&tx.txid);
-            let entry = if spent > Amount::ZERO {
+            let entry = if spent > Amount::ZERO && got > spent {
+                // A Payjoin receipt: our coin went in and came back with the sale.
+                let buyer = inputs.iter().find(|c| c.owner != owner).map(|c| c.owner);
+                HistoryEntry {
+                    txid: tx.txid,
+                    direction: Direction::In,
+                    amount: got - spent,
+                    counterparty: buyer.and_then(|o| self.name_of(o)),
+                    memo: self
+                        .invoice_item(tx.txid)
+                        .unwrap_or_else(|| "Payjoin".to_owned()),
+                    height,
+                    round,
+                }
+            } else if spent > Amount::ZERO {
                 let others: Vec<_> = tx
                     .vout
                     .iter()

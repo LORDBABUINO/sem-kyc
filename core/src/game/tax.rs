@@ -82,7 +82,13 @@ impl Game {
             .collect();
         for op in ops {
             let (payer, payee) = self.attributed(&op.txid, op.vout);
-            for who in [payer, payee].into_iter().flatten() {
+            // One person on both ends (the State's own confusion) is one operation.
+            let sides = if payer == payee {
+                vec![payer]
+            } else {
+                vec![payer, payee]
+            };
+            for who in sides.into_iter().flatten() {
                 let e = charges.entry(who).or_insert((Amount::ZERO, Vec::new()));
                 e.0 += op.amount;
                 if !e.1.contains(&op.txid) {

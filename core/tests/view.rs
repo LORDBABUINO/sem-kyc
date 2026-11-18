@@ -127,3 +127,32 @@ fn standings_subtract_open_debt() {
     assert_eq!(mine.2, balance(&g, padaria) - g.debt(padaria));
     assert!(rows.windows(2).all(|w| w[0].2 >= w[1].2));
 }
+
+#[test]
+fn a_payjoin_receipt_reads_as_income_for_the_seller() {
+    let mut g = game(8);
+    skip_rounds(&mut g, 7, NOW);
+    for a in g.autos().to_vec() {
+        if a.paid.is_none() {
+            g.pay_auto(a.player, a.id, None).expect("settle");
+        }
+    }
+    start_round(&mut g, NOW);
+    let padaria = player_in(&g, Sector::Padaria);
+    let fazenda = player_in(&g, Sector::Fazenda);
+    g.set_receive_mode(fazenda, ReceiveMode::Payjoin)
+        .expect("payjoin");
+    let invoice = g
+        .create_invoice(fazenda, "farinha e ovos", NOW)
+        .expect("invoice");
+    g.pay_invoice(padaria, &invoice.code, None, true)
+        .expect("proposed");
+    let mine = coins(&g, fazenda);
+    g.respond_payjoin(fazenda, &invoice.code, Some(mine[0]))
+        .expect("settled");
+    let entry = &g.history(fazenda)[0];
+    assert_eq!(entry.direction, Direction::In);
+    assert_eq!(entry.amount, invoice.amount);
+    assert_eq!(entry.memo, "farinha e ovos");
+    assert_eq!(entry.counterparty.as_deref(), Some("P1"));
+}

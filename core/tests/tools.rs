@@ -295,3 +295,53 @@ fn silent_payments_need_taproot_and_hide_the_storefront() {
     g.pay_invoice(padaria, &a.code, None, false).expect("paid");
     assert_eq!(g.identity(&a.address), Identity::Unknown);
 }
+
+#[test]
+fn a_coin_spent_after_sitting_down_leaves_the_table() {
+    let mut g = game(8);
+    skip_rounds(&mut g, 5, NOW);
+    for a in g.autos().to_vec() {
+        if a.paid.is_none() {
+            g.pay_auto(a.player, a.id, None).expect("settle");
+        }
+    }
+    start_round(&mut g, NOW);
+    let ids: Vec<_> = g.players().map(|p| p.id).collect();
+    let mut seats = Vec::new();
+    for id in &ids[..5] {
+        let op = *coins(&g, *id).last().expect("a big coin");
+        g.join_coinjoin(*id, op, NOW).expect("join");
+        seats.push((*id, op));
+    }
+    // The first player pays an invoice with the coin at the table.
+    let (buyer, op) = seats[0];
+    let seller = ids.iter().copied().find(|s| *s != buyer).expect("seller");
+    let item = g.trails.catalog(g.player(seller).expect("s").sector)[0]
+        .name
+        .clone();
+    let invoice = g.create_invoice(seller, &item, NOW).expect("invoice");
+    g.pay_invoice(buyer, &invoice.code, Some(&[op]), false)
+        .expect("paid");
+    g.drain_events();
+    g.coinjoin_tick(NOW + 31);
+    let events = g.drain_events();
+    assert!(
+        events
+            .iter()
+            .any(|e| matches!(e, Event::CoinJoin { txid: None, .. })),
+        "four live coins do not mix"
+    );
+}
+
+#[test]
+fn migrating_nothing_does_not_count_as_migrating() {
+    let mut g = game(8);
+    skip_rounds(&mut g, 6, NOW);
+    start_round(&mut g, NOW);
+    let fazenda = player_in(&g, Sector::Fazenda);
+    assert_eq!(
+        g.migrate_taproot(fazenda, &[], true),
+        Err(GameError::WrongCoin)
+    );
+    assert!(!g.player(fazenda).expect("p").taproot);
+}

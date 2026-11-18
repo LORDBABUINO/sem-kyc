@@ -200,17 +200,28 @@ impl Game {
     pub(super) fn settle_room(&mut self, _now: u64) {
         let Some(room) = self.room.take() else { return };
         let players: Vec<PlayerId> = room.entries.iter().map(|(p, _)| *p).collect();
-        if room.entries.len() < self.config.coinjoin_min {
+        // Coins spent or frozen since the player sat down are not at the table.
+        let denom = self.config.coinjoin_denomination;
+        let live: Vec<(PlayerId, OutPoint)> = room
+            .entries
+            .iter()
+            .filter(|(player, op)| {
+                self.ledger.coin(op).is_some_and(|c| {
+                    c.owner == Owner::Player(*player) && !c.frozen && c.amount >= denom
+                })
+            })
+            .copied()
+            .collect();
+        if live.len() < self.config.coinjoin_min {
             self.events.push(Event::CoinJoin {
                 txid: None,
                 players,
             });
             return;
         }
-        let denom = self.config.coinjoin_denomination;
         let mut inputs = Vec::new();
         let mut outputs = Vec::new();
-        for (player, op) in &room.entries {
+        for (player, op) in &live {
             let Some(coin) = self.ledger.coin(op).cloned() else {
                 continue;
             };
@@ -262,6 +273,9 @@ impl Game {
     ) -> Result<Vec<Txid>, GameError> {
         if !self.player(player)?.has(Unlock::Taproot) {
             return Err(GameError::Locked);
+        }
+        if ops.is_empty() {
+            return Err(GameError::WrongCoin);
         }
         let mut coins = Vec::new();
         for (i, op) in ops.iter().enumerate() {

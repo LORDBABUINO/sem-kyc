@@ -169,14 +169,20 @@ pub fn fan_out(events: Vec<Event>, game: &Game) -> Vec<Outgoing> {
                 auto_id,
                 txid,
             } => {
+                let amount = game
+                    .autos()
+                    .iter()
+                    .find(|a| a.id == auto_id)
+                    .map(|a| a.amount.to_sat())
+                    .unwrap_or(0);
                 out.push(to(
                     Audience::Player(player),
-                    json!({"event": "auto", "auto_id": auto_id, "paid": true, "txid": txid}),
+                    json!({"event": "auto", "auto_id": auto_id, "amount": amount, "paid": true, "txid": txid}),
                 ));
                 out.push(to(
                     Audience::Projector,
                     json!({"event": "auto", "auto_id": auto_id, "player": player,
-                           "name": name(game, player), "paid": true}),
+                           "name": name(game, player), "amount": amount, "paid": true}),
                 ));
             }
             Event::CoinJoin { txid, players } => {

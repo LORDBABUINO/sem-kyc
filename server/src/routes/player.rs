@@ -175,6 +175,7 @@ pub async fn respond_payjoin(
     body: Option<Json<PayjoinBody>>,
 ) -> Result<Json<Value>, ApiError> {
     let id = state.session(&headers)?;
+    open_for_trade(&state)?;
     let body = body.map(|b| b.0).unwrap_or_default();
     let contribute = body
         .contribute
