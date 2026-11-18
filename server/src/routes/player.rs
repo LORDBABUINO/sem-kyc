@@ -2,8 +2,8 @@ use axum::extract::{Path, State};
 use axum::http::HeaderMap;
 use axum::Json;
 use bitcoin::OutPoint;
-use dever_core::economy::PriceStyle;
-use dever_core::game::{CoinSelection, Payment, Phase, ReceiveMode};
+use semkyc_core::economy::PriceStyle;
+use semkyc_core::game::{CoinSelection, Payment, Phase, ReceiveMode};
 use serde::Deserialize;
 use serde_json::{json, Value};
 

@@ -1,8 +1,8 @@
 use axum::extract::{Path, State};
 use axum::http::HeaderMap;
 use axum::Json;
-use dever_core::game::{Config, Phase};
-use dever_core::ledger::Owner;
+use semkyc_core::game::{Config, Phase};
+use semkyc_core::ledger::Owner;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
@@ -182,7 +182,7 @@ pub async fn room(State(state): State<Shared>, headers: HeaderMap) -> Result<Jso
     let invoices_open = game
         .players()
         .flat_map(|p| game.invoices_of(p.id))
-        .filter(|i| i.round == round && matches!(i.status, dever_core::game::InvoiceStatus::Open))
+        .filter(|i| i.round == round && matches!(i.status, semkyc_core::game::InvoiceStatus::Open))
         .count();
     let log = game
         .operations()

@@ -1,4 +1,4 @@
-# Dever Cívico: roteiro da palestra-jogo
+# Sem KYC: roteiro da palestra-jogo
 
 Palestra interativa de 90 minutos sobre o funcionamento da rede Bitcoin e privacidade
 nas transações. A plateia entra por QR code, cada pessoa vira um empreendedor de um

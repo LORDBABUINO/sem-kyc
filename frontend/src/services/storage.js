@@ -1,6 +1,6 @@
-export const SESSION_KEY = 'dever.session'
-export const ADMIN_KEY = 'dever.admin'
-export const TAB_KEY = 'dever.tab'
+export const SESSION_KEY = 'semkyc.session'
+export const ADMIN_KEY = 'semkyc.admin'
+export const TAB_KEY = 'semkyc.tab'
 
 export const storage = {
   get(key) {

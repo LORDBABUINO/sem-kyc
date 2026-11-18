@@ -1,4 +1,4 @@
-//! HTTP and WebSocket transport for Dever Cívico.
+//! HTTP and WebSocket transport for Sem KYC.
 
 pub mod bots;
 pub mod error;

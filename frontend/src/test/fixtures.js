@@ -118,7 +118,7 @@ export function makeState(overrides = {}) {
     players: 12,
     registered: 9,
     counter_address: 'bc1qguiche00000000000000000000000000000000',
-    join_url: 'https://dever.exemplo/',
+    join_url: 'https://semkyc.exemplo/',
     reveal: null,
     autos_open: [],
     totals: { assessed: 0, collected: 0 },

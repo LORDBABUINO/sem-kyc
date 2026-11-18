@@ -1,11 +1,11 @@
 [package]
-name = "dever-core"
+name = "semkyc-core"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
 rust-version.workspace = true
-description = "Game rules of Dever Cívico: an in-memory Bitcoin ledger, the State's cluster view and the ICMS"
+description = "Game rules of Sem KYC: an in-memory Bitcoin ledger, the State's cluster view and the ICMS"
 autotests = false
 
 [dependencies]

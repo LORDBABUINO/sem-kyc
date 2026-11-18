@@ -1,9 +1,9 @@
 //! Rehearsal players. They fill the empty sectors, trade among themselves and
 //! make the mistake each round is about, so every slide's detector fires.
 
-use dever_core::economy::{PriceStyle, Sector};
-use dever_core::game::{CoinSelection, Game, ItemStatus, Phase, ReceiveMode};
-use dever_core::ledger::{Origin, Owner, PlayerId};
+use semkyc_core::economy::{PriceStyle, Sector};
+use semkyc_core::game::{CoinSelection, Game, ItemStatus, Phase, ReceiveMode};
+use semkyc_core::ledger::{Origin, Owner, PlayerId};
 
 use crate::error::ApiError;
 use crate::state::{now, Shared};

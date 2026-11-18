@@ -1,9 +1,9 @@
 use bitcoin::Amount;
-use dever_core::address::ScriptKind;
-use dever_core::cluster::{is_coinjoin_shape, Identity};
-use dever_core::economy::Sector;
-use dever_core::game::{Event, GameError, ReceiveMode};
-use dever_core::ledger::{Origin, Owner};
+use semkyc_core::address::ScriptKind;
+use semkyc_core::cluster::{is_coinjoin_shape, Identity};
+use semkyc_core::economy::Sector;
+use semkyc_core::game::{Event, GameError, ReceiveMode};
+use semkyc_core::ledger::{Origin, Owner};
 
 use crate::common::*;
 
@@ -122,7 +122,7 @@ fn lightning_round_trip_on_a_fresh_exchange_coin() {
     let addr = g.player(loja).expect("p").storefront.clone();
     let txid = g
         .ledger
-        .mint(vec![dever_core::ledger::OutputSpec {
+        .mint(vec![semkyc_core::ledger::OutputSpec {
             address: addr.clone(),
             amount: Amount::from_sat(300_000),
             owner: Owner::Player(loja),

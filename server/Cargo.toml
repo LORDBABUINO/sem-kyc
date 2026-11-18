@@ -1,17 +1,17 @@
 [package]
-name = "dever-server"
+name = "semkyc-server"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
 rust-version.workspace = true
-description = "HTTP and WebSocket transport for Dever Cívico"
+description = "HTTP and WebSocket transport for Sem KYC"
 autotests = false
 
 [dependencies]
 axum = { workspace = true }
 bitcoin = { workspace = true }
-dever-core = { workspace = true }
+semkyc-core = { workspace = true }
 futures-util = { workspace = true }
 rand = { workspace = true }
 serde = { workspace = true }

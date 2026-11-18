@@ -233,39 +233,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4583a4551df46e2792f82ceeac45e850d2e2d5debba0b91f102385cda5b11f06"
 
 [[package]]
-name = "dever-core"
-version = "0.1.0"
-dependencies = [
- "bitcoin",
- "serde",
- "serde_json",
- "stealth-engine",
- "stealth-model",
- "thiserror",
-]
-
-[[package]]
-name = "dever-server"
-version = "0.1.0"
-dependencies = [
- "axum",
- "bitcoin",
- "dever-core",
- "futures-util",
- "http-body-util",
- "rand 0.8.8",
- "serde",
- "serde_json",
- "stealth-engine",
- "thiserror",
- "tokio",
- "tower",
- "tower-http",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
 name = "digest"
 version = "0.10.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -695,6 +662,39 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d4387882333d3aa8cb20530a17c69a3752e97837832f34f6dccc760e715001d9"
 dependencies = [
  "cc",
+]
+
+[[package]]
+name = "semkyc-core"
+version = "0.1.0"
+dependencies = [
+ "bitcoin",
+ "serde",
+ "serde_json",
+ "stealth-engine",
+ "stealth-model",
+ "thiserror",
+]
+
+[[package]]
+name = "semkyc-server"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "bitcoin",
+ "futures-util",
+ "http-body-util",
+ "rand 0.8.8",
+ "semkyc-core",
+ "serde",
+ "serde_json",
+ "stealth-engine",
+ "thiserror",
+ "tokio",
+ "tower",
+ "tower-http",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]

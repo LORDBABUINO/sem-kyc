@@ -1,8 +1,8 @@
 use bitcoin::Amount;
-use dever_core::cluster::Identity;
-use dever_core::economy::Sector;
-use dever_core::game::{GameError, ReceiveMode};
-use dever_core::ledger::Owner;
+use semkyc_core::cluster::Identity;
+use semkyc_core::economy::Sector;
+use semkyc_core::game::{GameError, ReceiveMode};
+use semkyc_core::ledger::Owner;
 
 use crate::common::*;
 
@@ -158,7 +158,7 @@ fn paying_the_counter_with_a_clean_coin_names_it() {
         .ledger
         .coins_of(Owner::Player(padaria))
         .into_iter()
-        .find(|c| c.origin == dever_core::ledger::Origin::Bonus)
+        .find(|c| c.origin == semkyc_core::ledger::Origin::Bonus)
         .cloned()
         .expect("bonus coin");
     assert_eq!(g.identity(&bonus.address), Identity::Unknown);
@@ -185,11 +185,11 @@ fn an_exact_payment_is_billed_once_and_the_seller_stays_unknown() {
     let store = g.player(padaria).expect("p").storefront.clone();
     let txid = g
         .ledger
-        .mint(vec![dever_core::ledger::OutputSpec {
+        .mint(vec![semkyc_core::ledger::OutputSpec {
             address: store,
             amount: invoice.amount,
             owner: Owner::Player(padaria),
-            origin: dever_core::ledger::Origin::Initial,
+            origin: semkyc_core::ledger::Origin::Initial,
         }])
         .expect("mint");
     let exact = bitcoin::OutPoint { txid, vout: 0 };
@@ -224,7 +224,7 @@ fn the_same_player_on_both_ends_is_billed_once() {
     start_round(&mut g, NOW);
     let padaria = player_in(&g, Sector::Padaria);
     let fazenda = player_in(&g, Sector::Fazenda);
-    g.set_price_style(fazenda, dever_core::economy::PriceStyle::Odd)
+    g.set_price_style(fazenda, semkyc_core::economy::PriceStyle::Odd)
         .expect("odd");
     let mine = coins(&g, padaria);
     g.migrate_taproot(padaria, &mine[..1], false)
@@ -232,7 +232,7 @@ fn the_same_player_on_both_ends_is_billed_once() {
     let segwit: Vec<_> = g
         .spendable(padaria)
         .iter()
-        .filter(|c| c.kind == dever_core::address::ScriptKind::Segwit)
+        .filter(|c| c.kind == semkyc_core::address::ScriptKind::Segwit)
         .map(|c| c.outpoint)
         .collect();
     let invoice = g

@@ -1,6 +1,6 @@
 use axum::extract::State;
 use axum::Json;
-use dever_core::view::ClusterSnapshot;
+use semkyc_core::view::ClusterSnapshot;
 
 use crate::state::Shared;
 use crate::views::{self, PublicState};

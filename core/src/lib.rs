@@ -1,4 +1,4 @@
-//! Game rules of Dever Cívico: an in-memory Bitcoin ledger, the State's cluster
+//! Game rules of Sem KYC: an in-memory Bitcoin ledger, the State's cluster
 //! view, the economy of the eight sectors and the bridge to stealth-engine.
 
 pub mod address;

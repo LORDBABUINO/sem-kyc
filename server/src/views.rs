@@ -1,13 +1,13 @@
 //! What the screens receive, shaped as `api.md` describes.
 
 use bitcoin::{Amount, OutPoint};
-use dever_core::address::ScriptKind;
-use dever_core::economy::{PriceStyle, Sector};
-use dever_core::game::{
+use semkyc_core::address::ScriptKind;
+use semkyc_core::economy::{PriceStyle, Sector};
+use semkyc_core::game::{
     CoinSelection, Game, Invoice, InvoiceStatus, Mission, Phase, Player, ReceiveMode, Unlock,
 };
-use dever_core::ledger::{Coin, Origin, Owner, PlayerId};
-use dever_core::view::{AutoView, HistoryEntry, Reveal};
+use semkyc_core::ledger::{Coin, Origin, Owner, PlayerId};
+use semkyc_core::view::{AutoView, HistoryEntry, Reveal};
 use serde::Serialize;
 
 use crate::error::ApiError;
@@ -108,8 +108,8 @@ impl From<&Player> for PlayerView {
 
 #[derive(Debug, Serialize)]
 pub struct MissionItemView {
-    pub item: dever_core::economy::Item,
-    pub status: dever_core::game::ItemStatus,
+    pub item: semkyc_core::economy::Item,
+    pub status: semkyc_core::game::ItemStatus,
     pub price: u64,
     pub supplier: SectorInfo,
 }
@@ -160,7 +160,7 @@ pub struct InvoiceView {
     pub seller: PlayerId,
     pub seller_name: String,
     pub seller_sector: SectorInfo,
-    pub item: dever_core::economy::Item,
+    pub item: semkyc_core::economy::Item,
     pub amount: u64,
     pub display: String,
     pub uri: String,

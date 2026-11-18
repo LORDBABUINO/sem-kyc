@@ -1,7 +1,7 @@
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use axum::Json;
-use dever_core::game::GameError;
+use semkyc_core::game::GameError;
 use serde_json::json;
 
 #[derive(Debug)]

@@ -1,8 +1,8 @@
 use bitcoin::Amount;
-use dever_core::cluster::Identity;
-use dever_core::economy::Sector;
-use dever_core::game::ReceiveMode;
-use dever_core::view::Direction;
+use semkyc_core::cluster::Identity;
+use semkyc_core::economy::Sector;
+use semkyc_core::game::ReceiveMode;
+use semkyc_core::view::Direction;
 
 use crate::common::*;
 

@@ -28,7 +28,7 @@ export default function Entry({ onJoined }) {
 
   return (
     <form className={styles.centered} onSubmit={submit}>
-      <h1 className={styles.title}>Dever Cívico</h1>
+      <h1 className={styles.title}>Sem KYC</h1>
       <p className={styles.subtitle}>
         Você vai abrir um negócio na República Democrática de Nova Alvorada e comprar insumos dos outros, pagando em bitcoin.
         Escolha um nome fantasia.
