@@ -1,0 +1,27 @@
+[package]
+name = "fiscal-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Game rules of O Fiscal: an in-memory Bitcoin ledger, the State's cluster view and the ICMS"
+autotests = false
+
+[dependencies]
+bitcoin = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+stealth-engine = { workspace = true }
+stealth-model = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+stealth-engine = { workspace = true }
+
+[[test]]
+name = "main"
+path = "tests/main.rs"
+
+[lints.rust]
+missing_debug_implementations = "deny"
