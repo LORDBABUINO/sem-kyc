@@ -372,7 +372,9 @@ Fala do Estado:
 - O que não fazer: misturar tipos na mesma transação, e ter hábitos. Carteira é
   rotina, e rotina é assinatura.
 - Honestidade do Estado: migrar pra Taproot é uma transação de você pra você, e o
-  Estado vê ela. Migrar não apaga o passado. Só para de assinar o futuro.
+  Estado vê ela. Uma moeda só, pra um endereço só, ele não consegue seguir; mas o
+  endereço antigo continua com o seu nome, e migrar tudo junto é uma consolidação
+  com o seu nome. Migrar não apaga o passado. Só para de assinar o futuro.
 
 Destrava: "migrar pra Taproot" na carteira (gasta as moedas escolhidas pra
 endereços bc1p novos, uma transação por moeda ou uma só, o jogador escolhe e o app

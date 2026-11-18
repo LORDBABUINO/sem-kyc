@@ -68,6 +68,11 @@ fn a_known_payer_is_assessed_too_and_an_unknown_one_is_not() {
     trade(&mut g, padaria, fazenda, "farinha e ovos", NOW);
     g.close_round(NOW + 200).expect("close");
     assert_eq!(g.autos_of(padaria).len(), 1, "the payer was known");
+    let amount = g.operations()[0].amount;
+    assert_eq!(
+        g.autos_of(padaria)[0].amount,
+        Amount::from_sat(amount.to_sat() * 36 / 100)
+    );
     assert!(g.autos_of(fazenda).is_empty(), "a fresh address is nobody");
 }
 
@@ -162,4 +167,44 @@ fn paying_the_counter_with_a_clean_coin_names_it() {
     g.pay_auto(padaria, auto_id, Some(&[bonus.outpoint, big]))
         .expect("paid with the bonus");
     assert_eq!(g.identity(&bonus.address), Identity::Known(padaria));
+}
+
+/// Paying with the exact coin leaves one output; the State must not follow
+/// it, or the buyer would be billed as payer and payee.
+#[test]
+fn an_exact_payment_is_billed_once_and_the_seller_stays_unknown() {
+    let mut g = game(8);
+    skip_rounds(&mut g, 1, NOW);
+    start_round(&mut g, NOW);
+    let padaria = player_in(&g, Sector::Padaria);
+    let energia = player_in(&g, Sector::Energia);
+    let invoice = g
+        .create_invoice(energia, "painel solar do forno", NOW)
+        .expect("invoice");
+    // The Padaria has no coin of that exact value: mint one on its storefront.
+    let store = g.player(padaria).expect("p").storefront.clone();
+    let txid = g
+        .ledger
+        .mint(vec![fiscal_core::ledger::OutputSpec {
+            address: store,
+            amount: invoice.amount,
+            owner: Owner::Player(padaria),
+            origin: fiscal_core::ledger::Origin::Initial,
+        }])
+        .expect("mint");
+    let exact = bitcoin::OutPoint { txid, vout: 0 };
+    g.pay_invoice(padaria, &invoice.code, Some(&[exact]), false)
+        .expect("paid");
+    let tx = g.ledger.transactions().last().expect("tx").clone();
+    assert_eq!(tx.vout.len(), 1);
+    assert_eq!(g.identity(&invoice.address), Identity::Unknown);
+    g.close_round(NOW + 200).expect("close");
+    let autos = g.autos_of(padaria);
+    assert_eq!(autos.len(), 1);
+    assert_eq!(autos[0].base, invoice.amount);
+    assert_eq!(
+        autos[0].amount,
+        Amount::from_sat(invoice.amount.to_sat() * 36 / 100)
+    );
+    assert!(g.autos_of(energia).is_empty());
 }

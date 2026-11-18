@@ -69,6 +69,8 @@ pub enum LedgerError {
     NoOutputs,
     #[error("{0} is not an unspent output")]
     UnknownInput(OutPoint),
+    #[error("{0} is listed twice among the inputs")]
+    DuplicateInput(OutPoint),
     #[error("inputs pay {inputs} but outputs need {outputs}")]
     Insufficient { inputs: Amount, outputs: Amount },
     #[error("{0} is not an address kind the game knows")]
@@ -234,7 +236,10 @@ impl Ledger {
             return Err(LedgerError::NoOutputs);
         }
         let mut paid = Amount::ZERO;
-        for op in inputs {
+        for (i, op) in inputs.iter().enumerate() {
+            if inputs[..i].contains(op) {
+                return Err(LedgerError::DuplicateInput(*op));
+            }
             let coin = self.utxos.get(op).ok_or(LedgerError::UnknownInput(*op))?;
             paid += coin.amount;
         }
@@ -510,6 +515,19 @@ pub(crate) mod tests {
             })
         );
         assert_eq!(ledger.spend(&[coin], vec![]), Err(LedgerError::NoOutputs));
+        assert_eq!(
+            ledger.spend(
+                &[coin, coin],
+                vec![out(
+                    &mut book,
+                    ScriptKind::Segwit,
+                    15_000,
+                    Owner::Player(2),
+                    Origin::Sale(1)
+                )]
+            ),
+            Err(LedgerError::DuplicateInput(coin))
+        );
         assert_eq!(ledger.balance(Owner::Player(1)), Amount::from_sat(10_000));
     }
 

@@ -6,6 +6,7 @@ use std::collections::{BTreeSet, HashMap, HashSet};
 use bitcoin::address::NetworkUnchecked;
 use bitcoin::{Address, Amount, Txid};
 use serde::{Deserialize, Serialize};
+
 use stealth_model::gateway::DecodedTransaction;
 
 use crate::address::ScriptKind;
@@ -16,7 +17,6 @@ use crate::ledger::{Coin, PlayerId};
 pub enum Cause {
     CommonInput,
     Change,
-    SelfTransfer,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -42,12 +42,27 @@ pub enum ClusterEvent {
     },
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case", tag = "identity", content = "players")]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Identity {
     Unknown,
     Known(PlayerId),
     Conflict(BTreeSet<PlayerId>),
+}
+
+/// `{"identity": "known", "players": [3]}`: always a list, as api.md says.
+impl Serialize for Identity {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        use serde::ser::SerializeStruct;
+        let (tag, players): (&str, Vec<PlayerId>) = match self {
+            Identity::Unknown => ("unknown", Vec::new()),
+            Identity::Known(p) => ("known", vec![*p]),
+            Identity::Conflict(set) => ("conflict", set.iter().copied().collect()),
+        };
+        let mut st = s.serialize_struct("Identity", 2)?;
+        st.serialize_field("identity", tag)?;
+        st.serialize_field("players", &players)?;
+        st.end()
+    }
 }
 
 #[derive(Debug, Default, Clone)]
@@ -251,11 +266,8 @@ impl ClusterView {
                     .as_ref()
                     .is_some_and(|a| self.excluded.contains(a))
             });
-            if tx.vout.len() == 1 {
-                if let Some(a) = &tx.vout[0].address {
-                    self.union(first, a, Cause::SelfTransfer, tx.txid, &mut events);
-                }
-            } else if let (2, Some(idx)) = (tx.vout.len(), to_excluded) {
+            // One output proves nothing: an exact payment and a sweep look alike.
+            if let (2, Some(idx)) = (tx.vout.len(), to_excluded) {
                 if let Some(a) = &tx.vout[1 - idx].address {
                     self.union(first, a, Cause::Change, tx.txid, &mut events);
                 }
@@ -329,11 +341,11 @@ mod tests {
             }
         )));
         assert_eq!(view.identity(&coins[1].address), Identity::Known(1));
-        // A single output is a self transfer in the State's eyes.
+        // A single output could be a payment: the State does not follow it.
         let paid = &ledger.transactions().last().expect("tx").vout[0].address;
         assert_eq!(
             view.identity(paid.as_ref().expect("addr")),
-            Identity::Known(1)
+            Identity::Unknown
         );
     }
 
@@ -551,6 +563,23 @@ mod tests {
             .clusters()
             .values()
             .all(|members| !members.contains(&state)));
+    }
+
+    #[test]
+    fn identity_serializes_with_a_player_list() {
+        let json = |i: &Identity| serde_json::to_string(i).expect("json");
+        assert_eq!(
+            json(&Identity::Unknown),
+            r#"{"identity":"unknown","players":[]}"#
+        );
+        assert_eq!(
+            json(&Identity::Known(3)),
+            r#"{"identity":"known","players":[3]}"#
+        );
+        assert_eq!(
+            json(&Identity::Conflict(BTreeSet::from([1, 2]))),
+            r#"{"identity":"conflict","players":[1,2]}"#
+        );
     }
 
     #[test]

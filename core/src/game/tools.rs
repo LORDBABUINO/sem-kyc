@@ -264,7 +264,10 @@ impl Game {
             return Err(GameError::Locked);
         }
         let mut coins = Vec::new();
-        for op in ops {
+        for (i, op) in ops.iter().enumerate() {
+            if ops[..i].contains(op) {
+                return Err(GameError::NotYourCoin(*op));
+            }
             let coin = self.ledger.coin(op).ok_or(GameError::NotYourCoin(*op))?;
             if coin.owner != Owner::Player(player) {
                 return Err(GameError::NotYourCoin(*op));

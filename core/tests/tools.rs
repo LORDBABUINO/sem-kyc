@@ -75,26 +75,16 @@ fn lightning_takes_only_exchange_coins_and_brings_back_a_coin_with_no_past() {
         .coins_of(Owner::Player(loja))
         .into_iter()
         .find(|c| c.origin == Origin::ExchangeWithdrawal)
-        .cloned();
-    // Registration already spent the single exchange coin; fund a second one
-    // the way the game would see it: through the Loja's change.
+        .cloned()
+        .expect("the withdrawal survives the registration fee");
+    assert_eq!(
+        g.withdraw_via_lightning(loja, exchange_coin.outpoint),
+        Err(GameError::Locked)
+    );
     skip_rounds(&mut g, 4, NOW);
     start_round(&mut g, NOW);
-    let change = g
-        .ledger
-        .coins_of(Owner::Player(loja))
-        .into_iter()
-        .find(|c| c.origin == Origin::Change)
-        .cloned()
-        .expect("change");
-    assert_eq!(
-        g.withdraw_via_lightning(loja, change.outpoint),
-        Err(GameError::WrongCoin)
-    );
-    assert!(
-        exchange_coin.is_none(),
-        "the exchange coin was spent on the fee"
-    );
+    g.apply_kyc();
+    assert_eq!(g.identity(&exchange_coin.address), Identity::Known(loja));
     let padaria = player_in(&g, Sector::Padaria);
     let op = coins(&g, padaria)[0];
     assert_eq!(
@@ -107,6 +97,19 @@ fn lightning_takes_only_exchange_coins_and_brings_back_a_coin_with_no_past() {
         g.withdraw_via_lightning(padaria, theirs),
         Err(GameError::NotYourCoin(theirs))
     );
+    let before = balance(&g, loja);
+    let (_, inbound) = g
+        .withdraw_via_lightning(loja, exchange_coin.outpoint)
+        .expect("lightning");
+    assert_eq!(balance(&g, loja), before);
+    let back = g
+        .ledger
+        .coins_of(Owner::Player(loja))
+        .into_iter()
+        .find(|c| c.outpoint.txid == inbound)
+        .cloned()
+        .expect("inbound coin");
+    assert_eq!(g.identity(&back.address), Identity::Unknown);
 }
 
 #[test]
@@ -227,6 +230,10 @@ fn taproot_migration_changes_the_kind_and_links_what_it_joins() {
     skip_rounds(&mut g, 6, NOW);
     start_round(&mut g, NOW);
     let mine = coins(&g, fazenda);
+    assert_eq!(
+        g.migrate_taproot(fazenda, &[mine[0], mine[0]], true),
+        Err(GameError::NotYourCoin(mine[0]))
+    );
     let txids = g
         .migrate_taproot(fazenda, &mine, false)
         .expect("one tx per coin");

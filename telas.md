@@ -261,6 +261,9 @@ discordem. O pagamento do auto é uma transação comum do jogador pro endereço
 guichê (fixo, reutilizado de propósito: o Estado não se esconde), e entra no
 union-find como qualquer outra: as moedas usadas ganham o rótulo do pagador.
 
+A taxa de rede do Edital nº 6 é narrativa: o ledger do jogo não cobra fee, pra
+um pagamento no valor exato continuar sem troco.
+
 ### Preços
 
 Antes de abrir cada negociação: pra cada setor vendedor, `compradores` = número de

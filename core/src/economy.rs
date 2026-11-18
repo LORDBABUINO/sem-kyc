@@ -94,7 +94,12 @@ impl Sector {
             }
             Sector::Energia => vec![(ScriptKind::Segwit, sats(500_000)); 4],
             Sector::Transportadora => vec![(ScriptKind::Segwit, sats(250_000)); 8],
-            Sector::Loja => vec![(ScriptKind::Segwit, sats(2_000_000))],
+            Sector::Loja => {
+                vec![
+                    (ScriptKind::Segwit, sats(10_000)),
+                    (ScriptKind::Segwit, sats(1_990_000)),
+                ]
+            }
             Sector::Construtora => vec![
                 (ScriptKind::Segwit, sats(666_667)),
                 (ScriptKind::Segwit, sats(666_667)),

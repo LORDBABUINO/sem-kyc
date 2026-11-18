@@ -17,6 +17,7 @@ pub enum InvoiceStatus {
     Open,
     PayjoinPending {
         buyer: PlayerId,
+        #[serde(skip)]
         inputs: Vec<OutPoint>,
     },
     Paid {
@@ -236,6 +237,14 @@ impl Game {
         let InvoiceStatus::PayjoinPending { buyer, inputs } = invoice.status else {
             return Err(GameError::InvoiceClosed);
         };
+        // The buyer may have spent those coins meanwhile: check them again,
+        // and reopen the invoice if they are gone.
+        if let Err(e) = self.select_coins(buyer, invoice.amount, Some(&inputs)) {
+            if let Some(i) = self.invoices.get_mut(&code) {
+                i.status = InvoiceStatus::Open;
+            }
+            return Err(e);
+        }
         if let Some(op) = contribute {
             match self.ledger.coin(&op) {
                 Some(c) if c.owner == Owner::Player(seller) && !c.frozen => {}

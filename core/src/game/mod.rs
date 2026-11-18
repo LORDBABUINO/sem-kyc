@@ -455,16 +455,20 @@ impl Game {
         }
         let id = self.players.keys().next_back().map_or(1, |k| k + 1);
         let sector = Sector::ALL[self.players.len() % Sector::ALL.len()];
-        let origin = if sector.funded_by_exchange() {
-            Origin::ExchangeWithdrawal
-        } else {
-            Origin::Initial
-        };
+        let coins = sector.initial_coins();
+        let largest = coins.iter().map(|(_, a)| *a).max().unwrap_or(Amount::ZERO);
         let storefront = self.book.fresh(ScriptKind::Segwit);
         // Sectors that live off many small receipts kept them all on the
         // storefront address: the reuse is there before the first round.
         let mut batch = Vec::new();
-        for (kind, amount) in sector.initial_coins() {
+        for (kind, amount) in coins {
+            // The exchange-funded sector's big coin is the withdrawal; its small
+            // one is pocket money for the registration fee.
+            let origin = if sector.funded_by_exchange() && amount == largest {
+                Origin::ExchangeWithdrawal
+            } else {
+                Origin::Initial
+            };
             let on_storefront = sector.on_storefront() && kind == ScriptKind::Segwit;
             let spec = OutputSpec {
                 address: if on_storefront {
@@ -521,6 +525,15 @@ impl Game {
             },
         );
         self.events.push(Event::PlayerJoined { player: id });
+        // Whoever arrives late gets what the room already has.
+        for r in 1..=self.round {
+            for u in Unlock::for_round(r) {
+                self.grant(id, *u);
+            }
+        }
+        if self.round >= 1 {
+            self.assign_mission(id, self.round);
+        }
         Ok(id)
     }
 
@@ -635,7 +648,10 @@ impl Game {
                 return Err(GameError::Locked);
             }
             let mut total = Amount::ZERO;
-            for op in list {
+            for (i, op) in list.iter().enumerate() {
+                if list[..i].contains(op) {
+                    return Err(GameError::NotYourCoin(*op));
+                }
                 let coin = self.ledger.coin(op).ok_or(GameError::NotYourCoin(*op))?;
                 if coin.owner != Owner::Player(player) {
                     return Err(GameError::NotYourCoin(*op));
@@ -697,30 +713,36 @@ impl Game {
             for u in Unlock::for_round(next) {
                 self.grant(id, *u);
             }
-            let sector = self.players[&id].sector;
-            let items = self
-                .trails
-                .mission(sector, next)
-                .iter()
-                .map(|i| MissionItem {
-                    item: i.clone(),
-                    status: ItemStatus::Pending,
-                })
-                .collect();
-            self.players.get_mut(&id).map(|p| {
-                p.missions.insert(
-                    next,
-                    Mission {
-                        round: next,
-                        items,
-                        bonus: None,
-                    },
-                )
-            });
+            self.assign_mission(id, next);
         }
         self.phase = Phase::Newspaper { round: next };
         self.events.push(Event::Phase { phase: self.phase });
         Ok(self.phase)
+    }
+
+    fn assign_mission(&mut self, player: PlayerId, round: u8) {
+        let Some(sector) = self.players.get(&player).map(|p| p.sector) else {
+            return;
+        };
+        let items = self
+            .trails
+            .mission(sector, round)
+            .iter()
+            .map(|i| MissionItem {
+                item: i.clone(),
+                status: ItemStatus::Pending,
+            })
+            .collect();
+        if let Some(p) = self.players.get_mut(&player) {
+            p.missions.insert(
+                round,
+                Mission {
+                    round,
+                    items,
+                    bonus: None,
+                },
+            );
+        }
     }
 
     fn grant(&mut self, player: PlayerId, unlock: Unlock) {

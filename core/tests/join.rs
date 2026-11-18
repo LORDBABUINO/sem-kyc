@@ -85,9 +85,11 @@ fn the_exchange_funded_sector_is_unknown_until_kyc() {
         .cloned()
         .expect("exchange coin");
     assert_eq!(g.exchange_txids().len(), 1);
-    // Registration spent part of it, so its change is already named; the
-    // withdrawal address itself is only named by the exchange.
-    assert_eq!(g.identity(&coin.address), Identity::Known(loja));
+    // The fee came out of the small pocket coin; the withdrawal is untouched
+    // and nobody's until the exchange talks.
+    assert!(g.ledger.coin(&coin.outpoint).is_some());
+    assert_eq!(coin.amount, Amount::from_sat(1_990_000));
+    assert_eq!(g.identity(&coin.address), Identity::Unknown);
     // Stealth sees the batch shape of the withdrawal from day one; the
     // exchange's list only adds certainty when the exchange talks.
     let is_exchange = |r: &stealth_engine::types::Report| {
@@ -96,8 +98,29 @@ fn the_exchange_funded_sector_is_unknown_until_kyc() {
         })
     };
     assert!(is_exchange(&g.report(loja)));
+    g.drain_events();
     let named = g.apply_kyc();
     assert_eq!(named, vec![loja]);
     assert!(g.kyc_applied());
+    assert_eq!(g.identity(&coin.address), Identity::Known(loja));
+    assert!(g
+        .drain_events()
+        .iter()
+        .any(|e| matches!(e, fiscal_core::game::Event::Kyc { .. })));
     assert!(is_exchange(&g.report(loja)));
+}
+
+#[test]
+fn a_late_joiner_gets_the_rooms_unlocks_and_the_current_mission() {
+    let mut g = game(8);
+    skip_rounds(&mut g, 1, NOW);
+    start_round(&mut g, NOW);
+    let late = g.join("Atrasada").expect("join");
+    g.register(late).expect("register");
+    let p = g.player(late).expect("p");
+    assert!(p.has(fiscal_core::game::Unlock::FreshAddress));
+    assert!(p.has(fiscal_core::game::Unlock::CoinControl));
+    assert_eq!(p.receive_mode, fiscal_core::game::ReceiveMode::Fresh);
+    assert_eq!(p.missions[&2].items.len(), 2);
+    assert!(!p.missions.contains_key(&1));
 }

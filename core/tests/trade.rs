@@ -320,3 +320,56 @@ fn a_payjoin_invoice_paid_plainly_is_a_plain_payment() {
         .owner
         == Owner::Player(padaria)));
 }
+
+#[test]
+fn a_payjoin_proposal_with_coins_spent_meanwhile_is_refused_and_reopened() {
+    let mut g = game(8);
+    skip_rounds(&mut g, 7, NOW);
+    start_round(&mut g, NOW);
+    let padaria = player_in(&g, Sector::Padaria);
+    let fazenda = player_in(&g, Sector::Fazenda);
+    let energia = player_in(&g, Sector::Energia);
+    g.set_receive_mode(fazenda, ReceiveMode::Payjoin)
+        .expect("payjoin mode");
+    let invoice = g
+        .create_invoice(fazenda, "farinha e ovos", NOW)
+        .expect("invoice");
+    let mine = coins(&g, padaria);
+    let big = *mine.last().expect("coin");
+    g.pay_invoice(padaria, &invoice.code, Some(&[big]), true)
+        .expect("proposed");
+    // The buyer spends that very coin elsewhere before the seller answers.
+    let other = g
+        .create_invoice(energia, "painel solar do forno", NOW)
+        .expect("other");
+    g.pay_invoice(padaria, &other.code, Some(&[big]), false)
+        .expect("paid elsewhere");
+    let theirs = coins(&g, fazenda);
+    assert_eq!(
+        g.respond_payjoin(fazenda, &invoice.code, Some(theirs[0])),
+        Err(GameError::NotYourCoin(big))
+    );
+    assert_eq!(
+        g.invoice(&invoice.code).expect("i").status,
+        InvoiceStatus::Open
+    );
+}
+
+#[test]
+fn duplicate_inputs_never_pay_twice() {
+    let mut g = game(8);
+    skip_rounds(&mut g, 1, NOW);
+    start_round(&mut g, NOW);
+    let padaria = player_in(&g, Sector::Padaria);
+    let fazenda = player_in(&g, Sector::Fazenda);
+    let before = balance(&g, padaria);
+    let invoice = g
+        .create_invoice(fazenda, "lote grande de farinha", NOW)
+        .expect("invoice");
+    let small = coins(&g, padaria)[0];
+    assert_eq!(
+        g.pay_invoice(padaria, &invoice.code, Some(&[small, small]), false),
+        Err(GameError::NotYourCoin(small))
+    );
+    assert_eq!(balance(&g, padaria), before);
+}
