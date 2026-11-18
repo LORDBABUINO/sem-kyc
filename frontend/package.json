@@ -1,5 +1,5 @@
 {
-  "name": "rastro-frontend",
+  "name": "dever-frontend",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -23,5 +23,6 @@
     "jsdom": "^30.0.1",
     "vite": "^6.0.7",
     "vitest": "^4.1.11"
-  }
+  },
+  "packageManager": "yarn@4.9.1"
 }

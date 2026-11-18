@@ -4,7 +4,7 @@ import styles from './Projector.module.css'
 export default function Lobby({ state }) {
   return (
     <div className={`${styles.scene} ${styles.lobby}`}>
-      <h1 className={styles.lobbyTitle}>O Rastro</h1>
+      <h1 className={styles.lobbyTitle}>Dever Cívico</h1>
       <div className={styles.lobbyQr}>
         <QrCode value={state.join_url} size={Math.min(520, Math.round(window.innerHeight * 0.5))} label="QR de entrada" />
       </div>

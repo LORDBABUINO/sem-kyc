@@ -1,10 +1,10 @@
 use bitcoin::Amount;
-use rastro_core::cluster::is_round;
-use rastro_core::economy::{PriceStyle, Sector};
-use rastro_core::game::{
+use dever_core::cluster::is_round;
+use dever_core::economy::{PriceStyle, Sector};
+use dever_core::game::{
     CoinSelection, GameError, InvoiceStatus, ItemStatus, Payment, ReceiveMode, Unlock,
 };
-use rastro_core::ledger::{Origin, Owner};
+use dever_core::ledger::{Origin, Owner};
 
 use crate::common::*;
 
@@ -113,9 +113,9 @@ fn paying_moves_the_coins_marks_the_mission_and_pays_the_bonus() {
         .iter()
         .any(|c| c.origin == Origin::Bonus && c.outpoint.txid == bonus));
     let events = g.drain_events();
-    assert!(events.iter().any(
-        |e| matches!(e, rastro_core::game::Event::Bonus { player, .. } if *player == padaria)
-    ));
+    assert!(events
+        .iter()
+        .any(|e| matches!(e, dever_core::game::Event::Bonus { player, .. } if *player == padaria)));
 }
 
 #[test]

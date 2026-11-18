@@ -29,7 +29,7 @@ test('lobby: giant join QR, counts and block', async () => {
   setup(makeState())
   render(<ProjectorApp />)
   const qr = await screen.findByRole('img', { name: 'QR de entrada' })
-  expect(qr.getAttribute('data-value')).toBe('https://rastro.exemplo/')
+  expect(qr.getAttribute('data-value')).toBe('https://dever.exemplo/')
   expect(screen.getByText('9')).toBeTruthy()
   expect(screen.getByText('12')).toBeTruthy()
   expect(screen.getByText('estabelecimentos cadastrados')).toBeTruthy()

@@ -1,8 +1,8 @@
 use bitcoin::Amount;
-use rastro_core::cluster::Identity;
-use rastro_core::economy::Sector;
-use rastro_core::game::ReceiveMode;
-use rastro_core::view::Direction;
+use dever_core::cluster::Identity;
+use dever_core::economy::Sector;
+use dever_core::game::ReceiveMode;
+use dever_core::view::Direction;
 
 use crate::common::*;
 

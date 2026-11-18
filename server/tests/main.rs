@@ -1,10 +1,10 @@
 use axum::body::Body;
 use axum::http::{Request, StatusCode};
 use axum::Router;
+use dever_core::game::Config;
+use dever_server::state::{AppState, Shared};
+use dever_server::ws::{fan_out, listens, Audience};
 use http_body_util::BodyExt;
-use rastro_core::game::Config;
-use rastro_server::state::{AppState, Shared};
-use rastro_server::ws::{fan_out, listens, Audience};
 use serde_json::{json, Value};
 use tower::ServiceExt;
 
@@ -14,10 +14,10 @@ fn setup() -> (Router, Shared) {
     let state = AppState::new(
         Config::default(),
         ADMIN.to_owned(),
-        "http://rastro.test".to_owned(),
+        "http://dever.test".to_owned(),
     )
     .expect("state");
-    (rastro_server::app(state.clone(), None), state)
+    (dever_server::app(state.clone(), None), state)
 }
 
 async fn call(
@@ -233,7 +233,7 @@ async fn a_full_round_through_the_api() {
     let (_, state) = call(&app, "GET", "/api/state", &[], None).await;
     assert_eq!(state["payments_this_round"], 1);
     assert_eq!(state["players"], 8);
-    assert_eq!(state["join_url"], "http://rastro.test/");
+    assert_eq!(state["join_url"], "http://dever.test/");
     let (_, clusters) = call(&app, "GET", "/api/clusters", &[], None).await;
     assert!(clusters["clusters"].as_array().expect("clusters").len() >= 8);
     assert!(clusters["edges"]
@@ -309,7 +309,7 @@ async fn bots_fill_the_room_and_trade_among_themselves() {
     assert_eq!(body["players"].as_array().expect("players").len(), 8);
     admin(&app, "advance").await;
     admin(&app, "open").await;
-    let made = rastro_server::bots::step(&state);
+    let made = dever_server::bots::step(&state);
     assert!(made >= 6, "{made} payments");
     let (_, st) = call(&app, "GET", "/api/state", &[], None).await;
     assert_eq!(st["payments_this_round"], made);
@@ -351,7 +351,7 @@ async fn config_and_reset_are_for_the_presenter() {
 
 #[test]
 fn events_reach_their_audiences() {
-    let mut game = rastro_core::game::Game::new(Config::default()).expect("game");
+    let mut game = dever_core::game::Game::new(Config::default()).expect("game");
     let a = game.join("A").expect("a");
     let b = game.join("B").expect("b");
     game.register(a).expect("ra");

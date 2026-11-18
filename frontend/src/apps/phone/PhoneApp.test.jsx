@@ -115,6 +115,6 @@ test('remembers the current tab', async () => {
   render(<PhoneApp />)
   await screen.findByText('Rodada 1')
   fireEvent.click(screen.getByRole('tab', { name: /Crachá/ }))
-  expect(storage.get('rastro.tab')).toBe('badge')
+  expect(storage.get('dever.tab')).toBe('badge')
   expect(screen.getByText('Padaria da Lu')).toBeTruthy()
 })

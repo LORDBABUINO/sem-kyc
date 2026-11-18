@@ -1,6 +1,6 @@
-export const SESSION_KEY = 'rastro.session'
-export const ADMIN_KEY = 'rastro.admin'
-export const TAB_KEY = 'rastro.tab'
+export const SESSION_KEY = 'dever.session'
+export const ADMIN_KEY = 'dever.admin'
+export const TAB_KEY = 'dever.tab'
 
 export const storage = {
   get(key) {

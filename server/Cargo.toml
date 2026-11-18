@@ -1,17 +1,17 @@
 [package]
-name = "rastro-server"
+name = "dever-server"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
 rust-version.workspace = true
-description = "HTTP and WebSocket transport for O Rastro"
+description = "HTTP and WebSocket transport for Dever Cívico"
 autotests = false
 
 [dependencies]
 axum = { workspace = true }
 bitcoin = { workspace = true }
-rastro-core = { workspace = true }
+dever-core = { workspace = true }
 futures-util = { workspace = true }
 rand = { workspace = true }
 serde = { workspace = true }

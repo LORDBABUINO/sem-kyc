@@ -1,4 +1,4 @@
-//! HTTP and WebSocket transport for O Rastro.
+//! HTTP and WebSocket transport for Dever Cívico.
 
 pub mod bots;
 pub mod error;

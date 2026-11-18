@@ -1,4 +1,4 @@
-# O Rastro: roteiro da palestra-jogo
+# Dever Cívico: roteiro da palestra-jogo
 
 Palestra interativa de 90 minutos sobre o funcionamento da rede Bitcoin e privacidade
 nas transações. A plateia entra por QR code, cada pessoa vira um empreendedor de um

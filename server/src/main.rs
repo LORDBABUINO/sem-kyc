@@ -1,8 +1,8 @@
 use std::net::SocketAddr;
 use std::path::PathBuf;
 
-use rastro_core::game::Config;
-use rastro_server::state::AppState;
+use dever_core::game::Config;
+use dever_server::state::AppState;
 
 struct Args {
     port: u16,
@@ -15,8 +15,8 @@ struct Args {
 fn parse_args() -> Result<Args, String> {
     let mut args = Args {
         port: 20910,
-        admin_token: std::env::var("RASTRO_ADMIN_TOKEN").unwrap_or_default(),
-        public_url: std::env::var("RASTRO_PUBLIC_URL").unwrap_or_default(),
+        admin_token: std::env::var("DEVER_ADMIN_TOKEN").unwrap_or_default(),
+        public_url: std::env::var("DEVER_PUBLIC_URL").unwrap_or_default(),
         static_dir: Some(PathBuf::from("frontend/dist")),
         block_secs: 30,
     };
@@ -36,7 +36,7 @@ fn parse_args() -> Result<Args, String> {
         }
     }
     if args.admin_token.is_empty() {
-        return Err("set RASTRO_ADMIN_TOKEN or pass --admin-token".to_owned());
+        return Err("set DEVER_ADMIN_TOKEN or pass --admin-token".to_owned());
     }
     if args.public_url.is_empty() {
         args.public_url = format!("http://localhost:{}", args.port);
@@ -49,7 +49,7 @@ async fn main() {
     tracing_subscriber::fmt()
         .with_env_filter(
             tracing_subscriber::EnvFilter::try_from_default_env()
-                .unwrap_or_else(|_| "rastro_server=info,tower_http=info".into()),
+                .unwrap_or_else(|_| "dever_server=info,tower_http=info".into()),
         )
         .init();
     let args = match parse_args() {
@@ -66,8 +66,8 @@ async fn main() {
             std::process::exit(1);
         }
     };
-    rastro_server::spawn_clock(state.clone(), args.block_secs);
-    let app = rastro_server::app(state, args.static_dir);
+    dever_server::spawn_clock(state.clone(), args.block_secs);
+    let app = dever_server::app(state, args.static_dir);
     let addr = SocketAddr::from(([0, 0, 0, 0], args.port));
     let listener = match tokio::net::TcpListener::bind(addr).await {
         Ok(l) => l,
@@ -76,7 +76,7 @@ async fn main() {
             std::process::exit(1);
         }
     };
-    tracing::info!("O Rastro on {addr}, public URL {}", args.public_url);
+    tracing::info!("Dever Cívico on {addr}, public URL {}", args.public_url);
     if let Err(e) = axum::serve(listener, app).await {
         eprintln!("server error: {e}");
     }

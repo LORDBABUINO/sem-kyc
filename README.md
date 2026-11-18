@@ -1,4 +1,4 @@
-# O Rastro
+# Dever Cívico
 
 An interactive talk about how the Bitcoin network works and how to transact with
 privacy, played as a game. The audience joins through a QR code, each person runs a
@@ -25,7 +25,7 @@ At the end of the talk every player receives their Stealth report.
 ## Running
 
 ```bash
-cargo run -p rastro-server
+cargo run -p dever-server
 cd frontend && yarn && yarn dev
 ```
 

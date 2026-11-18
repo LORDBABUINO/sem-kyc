@@ -1,9 +1,9 @@
 #![allow(dead_code)]
 
 use bitcoin::{Amount, OutPoint, Txid};
-use rastro_core::economy::Sector;
-use rastro_core::game::{Config, Game, Phase};
-use rastro_core::ledger::PlayerId;
+use dever_core::economy::Sector;
+use dever_core::game::{Config, Game, Phase};
+use dever_core::ledger::PlayerId;
 
 pub const NOW: u64 = 1_700_000_000;
 
@@ -69,7 +69,7 @@ pub fn trade(g: &mut Game, buyer: PlayerId, seller: PlayerId, item: &str, now: u
         .pay_invoice(buyer, &invoice.code, None, false)
         .expect("pay")
     {
-        rastro_core::game::Payment::Settled { txid } => txid,
+        dever_core::game::Payment::Settled { txid } => txid,
         other => panic!("unexpected {other:?}"),
     }
 }
@@ -89,5 +89,5 @@ pub fn coins(g: &Game, player: PlayerId) -> Vec<OutPoint> {
 }
 
 pub fn balance(g: &Game, player: PlayerId) -> Amount {
-    g.ledger.balance(rastro_core::ledger::Owner::Player(player))
+    g.ledger.balance(dever_core::ledger::Owner::Player(player))
 }
