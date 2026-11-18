@@ -1,0 +1,10 @@
+target/
+node_modules/
+dist/
+**/.yarn/install-state.gz
+.env
+.env.local
+*.local
+.DS_Store
+.vscode
+**/__pycache__/

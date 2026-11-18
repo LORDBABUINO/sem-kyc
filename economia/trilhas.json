@@ -1,0 +1,530 @@
+{
+ "P": [
+  [
+   "farinha e ovos",
+   "F"
+  ],
+  [
+   "balcão e reforma",
+   "C"
+  ],
+  [
+   "alvará sanitário",
+   "K"
+  ],
+  [
+   "painel solar do forno",
+   "E"
+  ],
+  [
+   "entregas em domicílio",
+   "T"
+  ],
+  [
+   "forno elétrico",
+   "L"
+  ],
+  [
+   "sistema de pedidos",
+   "L"
+  ],
+  [
+   "cardápios e letreiro",
+   "G"
+  ],
+  [
+   "embalagens de marca",
+   "G"
+  ],
+  [
+   "lote grande de farinha",
+   "F"
+  ],
+  [
+   "contrato de franquia",
+   "K"
+  ],
+  [
+   "ampliação da energia",
+   "E"
+  ],
+  [
+   "farinha da segunda loja",
+   "F"
+  ],
+  [
+   "forno da segunda loja",
+   "L"
+  ],
+  [
+   "distribuição pra mercados",
+   "T"
+  ],
+  [
+   "segunda loja",
+   "C"
+  ]
+ ],
+ "F": [
+  [
+   "frete da colheita",
+   "T"
+  ],
+  [
+   "refeições da colheita",
+   "P"
+  ],
+  [
+   "bomba de irrigação",
+   "E"
+  ],
+  [
+   "embalagens e rótulos",
+   "G"
+  ],
+  [
+   "galpão de estoque",
+   "C"
+  ],
+  [
+   "licença ambiental",
+   "K"
+  ],
+  [
+   "frete da safra",
+   "T"
+  ],
+  [
+   "catálogo de produtos",
+   "G"
+  ],
+  [
+   "sensores de solo",
+   "L"
+  ],
+  [
+   "certificação orgânica",
+   "K"
+  ],
+  [
+   "frete da safra grande",
+   "T"
+  ],
+  [
+   "energia do galpão",
+   "E"
+  ],
+  [
+   "refeições da equipe",
+   "P"
+  ],
+  [
+   "drone de pulverização",
+   "L"
+  ],
+  [
+   "energia do silo",
+   "E"
+  ],
+  [
+   "silo",
+   "C"
+  ]
+ ],
+ "E": [
+  [
+   "arrendamento de terreno",
+   "F"
+  ],
+  [
+   "frete dos painéis",
+   "T"
+  ],
+  [
+   "material de venda",
+   "G"
+  ],
+  [
+   "contrato com a concessionária",
+   "K"
+  ],
+  [
+   "estrutura no telhado",
+   "C"
+  ],
+  [
+   "inversores",
+   "L"
+  ],
+  [
+   "baterias",
+   "L"
+  ],
+  [
+   "subestação",
+   "C"
+  ],
+  [
+   "frete da ampliação",
+   "T"
+  ],
+  [
+   "refeições da equipe de instalação",
+   "P"
+  ],
+  [
+   "frete da usina",
+   "T"
+  ],
+  [
+   "inversores novos",
+   "L"
+  ],
+  [
+   "catálogo técnico",
+   "G"
+  ],
+  [
+   "certificação técnica",
+   "K"
+  ],
+  [
+   "refeições da equipe",
+   "P"
+  ],
+  [
+   "expansão do terreno",
+   "F"
+  ]
+ ],
+ "T": [
+  [
+   "recarga da frota",
+   "E"
+  ],
+  [
+   "seguro e licença",
+   "K"
+  ],
+  [
+   "rastreadores",
+   "L"
+  ],
+  [
+   "garagem",
+   "C"
+  ],
+  [
+   "adesivagem da frota",
+   "G"
+  ],
+  [
+   "lanches de bordo",
+   "P"
+  ],
+  [
+   "contrato de escoamento",
+   "F"
+  ],
+  [
+   "recarga da frota",
+   "E"
+  ],
+  [
+   "sistema de rotas",
+   "L"
+  ],
+  [
+   "renovação do seguro",
+   "K"
+  ],
+  [
+   "ampliação da garagem",
+   "C"
+  ],
+  [
+   "adesivagem da frota nova",
+   "G"
+  ],
+  [
+   "lanches da equipe",
+   "P"
+  ],
+  [
+   "contrato da safra",
+   "F"
+  ],
+  [
+   "recarga da frota ampliada",
+   "E"
+  ],
+  [
+   "rastreadores novos",
+   "L"
+  ]
+ ],
+ "L": [
+  [
+   "vitrine e reforma",
+   "C"
+  ],
+  [
+   "fachada e panfletos",
+   "G"
+  ],
+  [
+   "coffee break de lançamento",
+   "P"
+  ],
+  [
+   "cestas pros funcionários",
+   "F"
+  ],
+  [
+   "contrato de importação",
+   "K"
+  ],
+  [
+   "frete da mercadoria",
+   "T"
+  ],
+  [
+   "painel solar",
+   "E"
+  ],
+  [
+   "regularização fiscal",
+   "K"
+  ],
+  [
+   "frete do novo lote",
+   "T"
+  ],
+  [
+   "segunda loja",
+   "C"
+  ],
+  [
+   "cestas de fim de ano",
+   "F"
+  ],
+  [
+   "catálogo",
+   "G"
+  ],
+  [
+   "frete da segunda loja",
+   "T"
+  ],
+  [
+   "energia da segunda loja",
+   "E"
+  ],
+  [
+   "coffee break da segunda loja",
+   "P"
+  ],
+  [
+   "catálogo novo",
+   "G"
+  ]
+ ],
+ "C": [
+  [
+   "alvará de obras",
+   "K"
+  ],
+  [
+   "frete de material",
+   "T"
+  ],
+  [
+   "ferramentas elétricas",
+   "L"
+  ],
+  [
+   "refeições do canteiro",
+   "P"
+  ],
+  [
+   "energia do canteiro",
+   "E"
+  ],
+  [
+   "placas de obra",
+   "G"
+  ],
+  [
+   "regularização",
+   "K"
+  ],
+  [
+   "frete da obra grande",
+   "T"
+  ],
+  [
+   "refeições da obra grande",
+   "P"
+  ],
+  [
+   "madeira e terra",
+   "F"
+  ],
+  [
+   "madeira da obra grande",
+   "F"
+  ],
+  [
+   "frete final",
+   "T"
+  ],
+  [
+   "placas da obra nova",
+   "G"
+  ],
+  [
+   "energia do canteiro novo",
+   "E"
+  ],
+  [
+   "drone de inspeção",
+   "L"
+  ],
+  [
+   "ferramentas novas",
+   "L"
+  ]
+ ],
+ "K": [
+  [
+   "cartões e material impresso",
+   "G"
+  ],
+  [
+   "computadores",
+   "L"
+  ],
+  [
+   "reforma do escritório",
+   "C"
+  ],
+  [
+   "mudança pra sede nova",
+   "T"
+  ],
+  [
+   "energia do escritório",
+   "E"
+  ],
+  [
+   "retiro da equipe na fazenda",
+   "F"
+  ],
+  [
+   "coffee break de clientes",
+   "P"
+  ],
+  [
+   "servidor",
+   "L"
+  ],
+  [
+   "relatório anual impresso",
+   "G"
+  ],
+  [
+   "energia da sede nova",
+   "E"
+  ],
+  [
+   "coffee break do evento",
+   "P"
+  ],
+  [
+   "evento de clientes no campo",
+   "F"
+  ],
+  [
+   "computadores novos",
+   "L"
+  ],
+  [
+   "sede nova",
+   "C"
+  ],
+  [
+   "material do evento",
+   "G"
+  ],
+  [
+   "transporte do evento",
+   "T"
+  ]
+ ],
+ "G": [
+  [
+   "fibra pro papel artesanal",
+   "F"
+  ],
+  [
+   "impressora",
+   "L"
+  ],
+  [
+   "frete do papel",
+   "T"
+  ],
+  [
+   "energia das máquinas",
+   "E"
+  ],
+  [
+   "contrato de fornecimento",
+   "K"
+  ],
+  [
+   "impressora de grande formato",
+   "L"
+  ],
+  [
+   "refeições da equipe",
+   "P"
+  ],
+  [
+   "frete do papel grande",
+   "T"
+  ],
+  [
+   "energia da máquina nova",
+   "E"
+  ],
+  [
+   "ampliação do galpão",
+   "C"
+  ],
+  [
+   "impressora nova",
+   "L"
+  ],
+  [
+   "refeições do turno da noite",
+   "P"
+  ],
+  [
+   "galpão novo",
+   "C"
+  ],
+  [
+   "frete do lote grande",
+   "T"
+  ],
+  [
+   "registro de marca",
+   "K"
+  ],
+  [
+   "fibra do lote grande",
+   "F"
+  ]
+ ]
+}
