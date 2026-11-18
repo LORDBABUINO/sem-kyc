@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { itemName } from '../../../utils/items.js'
 import { api } from '../../../services/api.js'
 import QrCode from '../../../components/QrCode.jsx'
 import { formatSats } from '../../../utils/format.js'
@@ -30,7 +31,7 @@ function PayjoinRequest({ me, invoice, onMe }) {
     <div className={`${styles.card} ${styles.cardWarn}`} data-testid="payjoin-request">
       <strong>{buyer} quer pagar junto.</strong>
       <span className={styles.small}>
-        {invoice.item}, {formatSats(invoice.amount)}. Contribuir uma moeda?
+        {itemName(invoice.item)}, {formatSats(invoice.amount)}. Contribuir uma moeda?
       </span>
       <CoinPicker coins={spendable(me.coins)} selected={selected} onChange={setSelected} single />
       {error && <p className={styles.error}>{error}</p>}
@@ -108,7 +109,7 @@ export default function Sell({ me, onMe }) {
           <div className={styles.qrBox}>
             <QrCode value={invoice.uri} size={300} label="QR do pedido" />
             <span className={styles.big}>{formatSats(invoice.amount)}</span>
-            <span>{invoice.item}</span>
+            <span>{itemName(invoice.item)}</span>
             <span className={styles.code} aria-label="código do pedido">
               {invoice.code}
             </span>

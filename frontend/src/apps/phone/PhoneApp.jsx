@@ -140,6 +140,7 @@ export default function PhoneApp() {
         <Pay
           me={me}
           initialCode={overlay.code}
+          typing={Boolean(overlay.typing)}
           onClose={() => setOverlay(null)}
           onPaid={refresh}
           onCounter={() => {

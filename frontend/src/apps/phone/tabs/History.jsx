@@ -30,8 +30,10 @@ export default function History({ me }) {
                   {ARROWS[entry.direction] || '·'}
                 </span>
                 <div className={`${styles.stack} ${styles.grow}`}>
-                  <span className={styles.ellipsis}>{entry.counterparty || 'desconhecido'}</span>
-                  <span className={`${styles.muted} ${styles.small} ${styles.ellipsis}`}>{entry.memo}</span>
+                  <span className={styles.ellipsis}>{entry.counterparty || entry.memo}</span>
+                  {entry.counterparty && (
+                    <span className={`${styles.muted} ${styles.small} ${styles.ellipsis}`}>{entry.memo}</span>
+                  )}
                 </div>
                 <div className={styles.stack} style={{ alignItems: 'flex-end' }}>
                   <span className={styles.amount}>

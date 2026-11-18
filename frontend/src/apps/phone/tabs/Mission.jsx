@@ -1,4 +1,5 @@
 import SectorBadge from '../../../components/SectorBadge.jsx'
+import { itemName } from '../../../utils/items.js'
 import { formatSats, formatCountdown } from '../../../utils/format.js'
 import { useCountdown } from '../../../utils/useCountdown.js'
 import { unlockInfo } from '../../../data/unlocks.js'
@@ -93,9 +94,9 @@ export default function Mission({ me, novidades, onDismiss, onOpen, onTab }) {
             {mission.items.map((entry) => {
               const status = STATUS[entry.status.status] || STATUS.pending
               return (
-                <div key={entry.item} className={styles.item} data-testid="mission-item">
+                <div key={itemName(entry.item)} className={styles.item} data-testid="mission-item">
                   <div className={`${styles.stack} ${styles.grow}`}>
-                    <strong>{entry.item}</strong>
+                    <strong>{itemName(entry.item)}</strong>
                     <SectorBadge sector={entry.supplier} size="sm" />
                   </div>
                   <div className={styles.stack} style={{ alignItems: 'flex-end' }}>

@@ -4,7 +4,7 @@ import { parseScan } from './scan.js'
 const COUNTER = 'bc1qguiche00000000000000000000000000000000'
 
 test('accepts a typed 6-char code', () => {
-  expect(parseScan(' abc123 ')).toEqual({ kind: 'code', code: 'abc123' })
+  expect(parseScan(' abc123 ')).toEqual({ kind: 'code', code: 'ABC123' })
   expect(parseScan('')).toEqual({ kind: 'empty' })
 })
 

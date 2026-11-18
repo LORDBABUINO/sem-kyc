@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { itemName } from '../../utils/items.js'
 import { api } from '../../services/api.js'
 import QrScanner from '../../components/QrScanner.jsx'
 import SectorBadge from '../../components/SectorBadge.jsx'
@@ -11,14 +12,14 @@ import styles from './Phone.module.css'
 
 const POLL_MS = 2000
 
-export default function Pay({ me, initialCode, onClose, onPaid, onCounter }) {
+export default function Pay({ me, initialCode, typing = false, onClose, onPaid, onCounter }) {
   const [step, setStep] = useState(initialCode ? 'loading' : 'scan')
   const [typed, setTyped] = useState('')
   const [invoice, setInvoice] = useState(null)
   const [selected, setSelected] = useState([])
   const [error, setError] = useState(null)
   const [result, setResult] = useState(null)
-  const [cameraOff, setCameraOff] = useState(false)
+  const [cameraOff, setCameraOff] = useState(typing)
 
   const manual = me.player.coin_selection === 'manual'
   const coins = spendable(me.coins)
@@ -56,11 +57,14 @@ export default function Pay({ me, initialCode, onClose, onPaid, onCounter }) {
     }
   }
 
-  const pay = async (payjoin) => {
+  // The coin of the exact value, when there is one: no change, nothing to follow.
+  const exact = invoice && hasUnlock(me, 'odd_price') ? coins.find((c) => c.amount === invoice.amount) : null
+
+  const pay = async (payjoin, chosen) => {
     setStep('paying')
     setError(null)
     try {
-      const inputs = manual ? selected : undefined
+      const inputs = chosen || (manual ? selected : undefined)
       const out = await api.payInvoice(invoice.code, { inputs, payjoin })
       if (out.result === 'settled') {
         setResult(out)
@@ -134,7 +138,7 @@ export default function Pay({ me, initialCode, onClose, onPaid, onCounter }) {
       {(step === 'invoice' || step === 'paying') && invoice && (
         <>
           <div className={`${styles.card} ${styles.cardAccent}`} style={{ '--sector': invoice.seller_sector && invoice.seller_sector.color }}>
-            <span className={styles.muted}>{invoice.item}</span>
+            <span className={styles.muted}>{itemName(invoice.item)}</span>
             <span className={styles.big}>{formatSats(invoice.amount)}</span>
             <div className={styles.rowStart}>
               <span>{invoice.seller_name}</span>
@@ -163,6 +167,16 @@ export default function Pay({ me, initialCode, onClose, onPaid, onCounter }) {
                 ? 'A carteira usa a menor moeda que cobre o valor.'
                 : 'A carteira escolhe as moedas sozinha.'}
             </p>
+          )}
+          {!manual && exact && hasUnlock(me, 'coin_control') && (
+            <button
+              type="button"
+              className={`${styles.btn} ${styles.btnPrimary}`}
+              onClick={() => pay(false, [exact.outpoint])}
+              disabled={step === 'paying'}
+            >
+              pague sem troco com a moeda de {formatSats(exact.amount)}
+            </button>
           )}
 
           {error && <p className={styles.error}>{error}</p>}
@@ -201,7 +215,7 @@ export default function Pay({ me, initialCode, onClose, onPaid, onCounter }) {
         <div className={`${styles.card} ${styles.cardOk}`}>
           <strong>Pago.</strong>
           <span className={styles.small}>
-            {invoice ? `${invoice.item}, ${formatSats(invoice.amount)} pra ${invoice.seller_name}.` : ''}
+            {invoice ? `${itemName(invoice.item)}, ${formatSats(invoice.amount)} pra ${invoice.seller_name}.` : ''}
           </span>
           {result && result.txid && <span className={styles.mono}>{shortId(result.txid)}</span>}
           <button type="button" className={`${styles.btn} ${styles.btnPrimary}`} onClick={onClose}>

@@ -116,3 +116,26 @@ test('PayAuto pays with manual coins and reports the txid', async () => {
   expect(fetchMock.find('POST', '/api/autos/7/pay')[0].body).toEqual({ inputs: [makeMe().coins[1].outpoint] })
   await waitFor(() => expect(onPaid).toHaveBeenCalled())
 })
+
+test('typing mode starts without the camera', () => {
+  mockFetch([])
+  render(<Pay me={makeMe()} typing onClose={noop} onPaid={noop} onCounter={noop} />)
+  expect(screen.getByLabelText('código do pedido')).toBeTruthy()
+  expect(document.querySelector('video')).toBeNull()
+})
+
+test('the exact coin is offered outside manual mode and pays with that coin', async () => {
+  const me = makeMe({
+    player: { ...makeMe().player, coin_selection: 'smallest_covering', unlocked: ['coin_control', 'odd_price'] },
+    coins: [makeCoin(), makeCoin({ outpoint: 'bb'.repeat(32) + ':1', amount: 60000 })],
+  })
+  const fetchMock = mockFetch([
+    ['GET', '/api/invoices/ABC123', makeInvoice()],
+    ['POST', '/api/invoices/ABC123/pay', { result: 'settled', txid: 'ff' }],
+  ])
+  render(<Pay me={me} initialCode="ABC123" onClose={noop} onPaid={noop} onCounter={noop} />)
+  await screen.findByText('farinha e ovos')
+  fireEvent.click(screen.getByText('pague sem troco com a moeda de 60.000 sats'))
+  await screen.findByText('Pago.')
+  expect(fetchMock.find('POST', '/api/invoices/ABC123/pay')[0].body).toEqual({ inputs: ['bb'.repeat(32) + ':1'] })
+})
