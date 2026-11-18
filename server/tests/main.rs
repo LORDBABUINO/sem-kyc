@@ -185,6 +185,10 @@ async fn a_full_round_through_the_api() {
         .as_str()
         .expect("uri")
         .contains("amount=0.0004&label=farinha%20e%20ovos"));
+    assert!(invoice["uri"]
+        .as_str()
+        .expect("uri")
+        .ends_with(&format!("&code={code}")));
     assert_eq!(invoice["seller_name"], "Loja 2");
 
     let (status, seen) = call(
@@ -197,6 +201,7 @@ async fn a_full_round_through_the_api() {
     .await;
     assert_eq!(status, StatusCode::OK);
     assert_eq!(seen["status"]["status"], "open");
+    assert!(seen["status"].get("buyer_name").is_none());
 
     let (status, paid) = call(
         &app,
@@ -267,8 +272,21 @@ async fn a_full_round_through_the_api() {
     let (status, room) = call(&app, "GET", "/api/admin/room", &[("x-admin", ADMIN)], None).await;
     assert_eq!(status, StatusCode::OK);
     assert_eq!(room["players"].as_array().expect("players").len(), 8);
-    assert_eq!(room["log"][0]["payer"], "Loja 1");
-    assert_eq!(room["log"][0]["item"], "farinha e ovos");
+    assert_eq!(room["log"][0]["name"], "Loja 1");
+    assert_eq!(room["log"][0]["counterparty"], "Loja 2");
+    assert_eq!(room["log"][0]["memo"], "farinha e ovos");
+    assert_eq!(room["log"][0]["direction"], "out");
+    let (_, seen) = call(
+        &app,
+        "GET",
+        &format!("/api/invoices/{code}"),
+        &[("x-session", padaria)],
+        None,
+    )
+    .await;
+    assert_eq!(seen["status"]["status"], "paid");
+    assert_eq!(seen["status"]["buyer_name"], "Loja 1");
+    assert!(seen["status"].get("inputs").is_none());
 }
 
 #[tokio::test]

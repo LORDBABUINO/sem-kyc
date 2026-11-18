@@ -193,10 +193,12 @@ pub async fn room(State(state): State<Shared>, headers: HeaderMap) -> Result<Jso
             json!({
                 "round": o.round,
                 "txid": o.txid,
-                "payer": game.player(o.payer).map(|p| p.name.clone()).unwrap_or_default(),
-                "payee": game.player(o.payee).map(|p| p.name.clone()).unwrap_or_default(),
+                "height": game.ledger.block_height(&o.txid),
+                "name": game.player(o.payer).map(|p| p.name.clone()).unwrap_or_default(),
+                "direction": "out",
+                "counterparty": game.player(o.payee).map(|p| p.name.clone()).unwrap_or_default(),
+                "memo": game.invoices_paid_by_txid(o.txid).map(|i| i.item.name.clone()),
                 "amount": o.amount.to_sat(),
-                "item": game.invoices_paid_by_txid(o.txid).map(|i| i.item.name.clone()),
             })
         })
         .collect();

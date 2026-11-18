@@ -27,7 +27,8 @@ Item       = {name, supplier: Sector}
 Mission    = {round, text, items:[{item, status:{status:"pending"|"paid"|"expired", txid?}, price, supplier: SectorInfo}], bonus: txid|null, complete}
 Invoice    = {code, seller, seller_name, seller_sector: SectorInfo, item, amount, display, uri, payjoin, round,
               status:{status:"open"|"payjoin_pending"|"paid"|"expired", buyer?, txid?}}
-             // uri = "bitcoin:<display>?amount=<btc>&label=<item>[&pj=<url>]"
+             // uri = "bitcoin:<display>?amount=<btc>&label=<item>&code=<code>[&pj=<url>]"
+             // status traz buyer_name quando há comprador
 HistoryEntry = {txid, direction:"in"|"out"|"internal", amount, counterparty: string|null, memo, height: int|null, round}
 Auto       = {id, player, name, round, amount, paid, late_rounds}
 Unlock     = "fresh_address"|"coin_control"|"odd_price"|"freeze"|"lightning"|"coin_join"|"taproot"|"payjoin"|"silent_payments"|"report"
@@ -121,7 +122,7 @@ Reveal = {round, headline:{round, player, finding}|null, headline_name, autos:[A
 - `POST /api/admin/autos/{id}/forgive` → `{}`
 - `POST /api/admin/bots` `{count}` → `{players:[id]}` (preenche setores e joga sozinho)
 - `POST /api/admin/reset` → `{}`
-- `GET /api/admin/room` → `{state: (como /api/state), players:[{id, name, sector, registered, balance, suspended, mission_complete}], invoices_open: int, coinjoin, log:[HistoryEntry-like]}`
+- `GET /api/admin/room` → `{state: (como /api/state), players:[{id, name, sector: SectorInfo, registered, balance, suspended, mission_complete, bot}], invoices_open: int, coinjoin, log:[{round, txid, height, name, direction:"out", counterparty, memo, amount}], config}`
 - `POST /api/admin/config` `{negotiation_secs?, icms_percent?, penalty_percent?, late_percent?, target_revenue?}` → config
 
 ## WebSocket

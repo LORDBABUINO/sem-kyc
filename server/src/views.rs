@@ -166,7 +166,7 @@ pub struct InvoiceView {
     pub uri: String,
     pub payjoin: bool,
     pub round: u8,
-    pub status: InvoiceStatus,
+    pub status: serde_json::Value,
 }
 
 pub fn invoice_view(game: &Game, i: &Invoice, public_url: &str) -> InvoiceView {
@@ -178,6 +178,8 @@ pub fn invoice_view(game: &Game, i: &Invoice, public_url: &str) -> InvoiceView {
         btc.trim_end_matches('0').trim_end_matches('.'),
         urlencode(&i.item.name)
     );
+    // The code rides along so a scanned QR needs no typing.
+    uri.push_str(&format!("&code={}", i.code));
     if i.payjoin {
         uri.push_str(&format!(
             "&pj={}/api/invoices/{}/payjoin",
@@ -196,8 +198,25 @@ pub fn invoice_view(game: &Game, i: &Invoice, public_url: &str) -> InvoiceView {
         uri,
         payjoin: i.payjoin,
         round: i.round,
-        status: i.status.clone(),
+        status: status_with_name(game, &i.status),
     }
+}
+
+/// The status as the enum serializes it, plus the buyer's name where there
+/// is a buyer, so the seller's screen can say who is paying.
+fn status_with_name(game: &Game, status: &InvoiceStatus) -> serde_json::Value {
+    let mut value = serde_json::to_value(status).unwrap_or(serde_json::Value::Null);
+    let buyer = match status {
+        InvoiceStatus::PayjoinPending { buyer, .. } | InvoiceStatus::Paid { buyer, .. } => {
+            Some(*buyer)
+        }
+        _ => None,
+    };
+    if let (Some(b), Some(obj)) = (buyer, value.as_object_mut()) {
+        let name = game.player(b).map(|p| p.name.clone()).unwrap_or_default();
+        obj.insert("buyer_name".to_owned(), serde_json::Value::String(name));
+    }
+    value
 }
 
 fn urlencode(s: &str) -> String {
